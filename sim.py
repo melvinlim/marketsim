@@ -31,6 +31,12 @@ md=MarketData('allData.pkl')
 data=md['all']
 dates=data.keys()
 dates.sort()
+today=data[dates[0]]
+i=0
+while len(today)!=8:
+	today=data[dates[i]]
+	i+=1
+dates=dates[i:]
 for date in dates:
 	today=data[date]
 	for stock in today:
