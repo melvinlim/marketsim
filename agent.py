@@ -39,35 +39,35 @@ def tof(x):
 	else:
 		return -1.0
 def buildObs(buf):
-	stk=0
 	n=len(buf)
 	res=[]
-	res.append(tof(buf[0][stk][4]>buf[1][stk][4]))
-	res.append(tof(buf[0][stk][4]<buf[1][stk][4]))
-	res.append(tof(buf[0][stk][0]>buf[1][stk][1]))
-	res.append(tof(buf[0][stk][0]<buf[1][stk][2]))
-	res.append(tof(buf[0][stk][0]>buf[1][stk][3]))
-	res.append(tof(buf[0][stk][0]<buf[1][stk][3]))
-	intervals=[5,10,15,30,60]
-	for interval in intervals:
-		ind=interval-1
-		if (ind)<n:
-			res.append(tof(buf[0][stk][3]>buf[ind][stk][3]))
-			res.append(tof(buf[0][stk][3]<buf[ind][stk][3]))
-	hl=[]
-	vol=[]
-	for i in range(WINDOWSZ):
-		hl.append(buf[i][stk][1]-buf[i][stk][2])
-		vol.append(buf[i][stk][4])
-	hlsd=stdev(hl)*0.318
-	volsd=stdev(vol)*0.318
-	hlm=mean(hl)
-	volm=mean(vol)
-	hl=buf[0][stk][1]-buf[0][stk][2]
-	res.append(tof(hl>(hlm+hlsd)))
-	res.append(tof(hl<(hlm-hlsd)))
-	res.append(tof(buf[0][stk][4]>(volm+volsd)))
-	res.append(tof(buf[0][stk][4]<(volm-volsd)))
+	for stk in range(len(buf[0])):
+		res.append(tof(buf[0][stk][4]>buf[1][stk][4]))
+		res.append(tof(buf[0][stk][4]<buf[1][stk][4]))
+		res.append(tof(buf[0][stk][0]>buf[1][stk][1]))
+		res.append(tof(buf[0][stk][0]<buf[1][stk][2]))
+		res.append(tof(buf[0][stk][0]>buf[1][stk][3]))
+		res.append(tof(buf[0][stk][0]<buf[1][stk][3]))
+		intervals=[5,10,15,30,60]
+		for interval in intervals:
+			ind=interval-1
+			if (ind)<n:
+				res.append(tof(buf[0][stk][3]>buf[ind][stk][3]))
+				res.append(tof(buf[0][stk][3]<buf[ind][stk][3]))
+		hl=[]
+		vol=[]
+		for i in range(WINDOWSZ):
+			hl.append(buf[i][stk][1]-buf[i][stk][2])
+			vol.append(buf[i][stk][4])
+		hlsd=stdev(hl)*0.318
+		volsd=stdev(vol)*0.318
+		hlm=mean(hl)
+		volm=mean(vol)
+		hl=buf[0][stk][1]-buf[0][stk][2]
+		res.append(tof(hl>(hlm+hlsd)))
+		res.append(tof(hl<(hlm-hlsd)))
+		res.append(tof(buf[0][stk][4]>(volm+volsd)))
+		res.append(tof(buf[0][stk][4]<(volm-volsd)))
 	return res
 class Agent():
 	def __init__(self,funds):
@@ -90,12 +90,15 @@ class Human(Agent):
 			print stock,stocks[stock]
 			totalStocks+=stocks[stock]
 		if self.stockList==[]:
-			for stock in stocks:
+			for stock in info.keys():
 				self.stockList.append(stock)
 		if len(self.stockList)!=len(info.keys()):
+			print len(self.stockList),len(info.keys())
 			for stock in self.stockList:
 				if stock not in info.keys():
 					info[stock]=self.buffer[0][stock]
+			print len(self.stockList),len(info.keys())
+		assert len(self.stockList)==len(info.keys())
 		processed=[]
 		for stock in info:
 			print stock,info[stock]
@@ -104,8 +107,10 @@ class Human(Agent):
 #		processed+=[float(dow)]
 #		processed+=expand(float(dow)-1,5)
 		#self.buffer.append(processed)
-		self.buffer.insert(0,processed)
-#		self.buffer.insert(0,info)
+#		self.buffer.insert(0,processed)
+		self.buffer.insert(0,info)
+		for entry in self.buffer:
+			assert(len(entry)==8)
 		if len(self.buffer)>MEMORYSIZE:
 			self.buffer.pop()
 #			for i in self.buffer:
