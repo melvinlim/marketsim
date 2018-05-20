@@ -78,6 +78,7 @@ class Human(Agent):
 		self.startingFunds=funds
 		self.funds=funds
 		self.buffer=[]
+		self.processedBuffer=[]
 		self.stockList=[]
 	def decide(self,state):
 		(date,account,info)=state
@@ -93,11 +94,9 @@ class Human(Agent):
 			for stock in info.keys():
 				self.stockList.append(stock)
 		if len(self.stockList)!=len(info.keys()):
-			print len(self.stockList),len(info.keys())
 			for stock in self.stockList:
 				if stock not in info.keys():
 					info[stock]=self.buffer[0][stock]
-			print len(self.stockList),len(info.keys())
 		assert len(self.stockList)==len(info.keys())
 		processed=[]
 		for stock in info:
@@ -107,7 +106,7 @@ class Human(Agent):
 #		processed+=[float(dow)]
 #		processed+=expand(float(dow)-1,5)
 		#self.buffer.append(processed)
-#		self.buffer.insert(0,processed)
+		self.processedBuffer.insert(0,processed)
 		self.buffer.insert(0,info)
 		for entry in self.buffer:
 			assert(len(entry)==8)
@@ -115,7 +114,7 @@ class Human(Agent):
 			self.buffer.pop()
 #			for i in self.buffer:
 #				printEvery(i,5)
-			self.obs=buildObs(self.buffer)
+			self.obs=buildObs(self.processedBuffer)
 			print self.obs
 		return raw_input()
 class Random(Agent):
