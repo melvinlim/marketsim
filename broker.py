@@ -46,7 +46,17 @@ class Broker():
 				action.strip('\r')
 				stock='XUS.TO'
 				if action=='b':
-					self.accounts[account].buy(100,stock,today[stock]['adjusted_close'])
+					if stock in today:
+						price=today[stock]['adjusted_close']
+						self.accounts[account].buy(100,stock,price)
+					else:
+						print 'market data unavailable today'
+#should sell at next available price.
 				elif action=='s':
 #should use tomorrow's opening price
-					self.accounts[account].sell(100,stock,today[stock]['adjusted_close'])
+					if stock in today:
+						price=today[stock]['adjusted_close']
+						self.accounts[account].sell(100,stock,price)
+					else:
+						print 'market data unavailable today'
+#should sell at next available price.
