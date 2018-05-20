@@ -65,16 +65,18 @@ class Human(Agent):
 		self.buffer=[]
 		self.processedBuffer=[]
 		self.stockList=[]
-	def decide(self,state):
+	def display(self,state):
 		(date,account,info)=state
+		dow=getDayOfWeek(strDate(date))
 		funds=account.funds
 		stocks=account.stocks
-		dow=getDayOfWeek(strDate(date))
 		print dow,date,funds
-		totalStocks=0
 		for stock in stocks:
 			print stock,stocks[stock]
-			totalStocks+=stocks[stock]
+	def decide(self,state):
+		(date,account,info)=state
+		dow=getDayOfWeek(strDate(date))
+		self.display(state)
 		if self.stockList==[]:
 			for stock in info.keys():
 				self.stockList.append(stock)
