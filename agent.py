@@ -1,4 +1,5 @@
 from dayofweek import *
+import random
 MEMORYSIZE=5
 def expand(x,n):
 	res=[]
@@ -71,6 +72,23 @@ class Human(Agent):
 			self.obs=buildObs(self.buffer)
 			print self.obs
 		return raw_input()
+class Random(Agent):
+	def __init__(self,name,funds):
+		self.name=name
+		self.startingFunds=funds
+		self.funds=funds
+		self.buffer=[]
+	def decide(self,state):
+		totalStocks=0
+		(date,account,info)=state
+		stocks=account.stocks
+		r=random.randint(0,2)
+		if r==0:
+			return 'b'
+		elif r==1:
+			return 's'
+		else:
+			return '\n'
 class BuyAndHold(Agent):
 	def __init__(self,name,funds):
 		self.name=name
@@ -83,6 +101,7 @@ class BuyAndHold(Agent):
 		stocks=account.stocks
 		for stock in stocks:
 			totalStocks+=stocks[stock]
-		if totalStocks==0:
+#		if totalStocks==0:
+		if True:
 			return 'b'
 		return '\n'
