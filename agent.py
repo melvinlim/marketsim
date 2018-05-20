@@ -1,5 +1,5 @@
 from dayofweek import *
-MEMORYSIZE=4
+MEMORYSIZE=5
 def expand(x,n):
 	res=[]
 	for i in range(n):
@@ -21,6 +21,7 @@ def tof(x):
 	else:
 		return -1.0
 def buildObs(buf):
+	n=len(buf)
 	res=[]
 	res.append(tof(buf[0][4]>buf[1][4]))
 	res.append(tof(buf[0][4]<buf[1][4]))
@@ -29,6 +30,11 @@ def buildObs(buf):
 	res.append(tof(buf[0][0]>buf[1][3]))
 	res.append(tof(buf[0][0]<buf[1][3]))
 	intervals=[5,10,15,30,60]
+	for interval in intervals:
+		ind=interval-1
+		if (ind)<n:
+			res.append(tof(buf[0][3]>buf[ind][3]))
+			res.append(tof(buf[0][3]<buf[ind][3]))
 	return res
 class Agent():
 	def __init__(self,funds):
@@ -58,7 +64,7 @@ class Human(Agent):
 		processed+=expand(float(dow)-1,5)
 		#self.buffer.append(processed)
 		self.buffer.insert(0,processed)
-		if len(self.buffer)>=MEMORYSIZE:
+		if len(self.buffer)>MEMORYSIZE:
 			self.buffer.pop()
 			for i in self.buffer:
 				printEvery(i,5)
