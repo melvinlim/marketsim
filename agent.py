@@ -15,6 +15,21 @@ def printEvery(l,x):
 		print l[t:t+x]
 		t+=x
 	print l[t:]
+def tof(x):
+	if x==True:
+		return 1.0
+	else:
+		return -1.0
+def buildObs(buf):
+	res=[]
+	res.append(tof(buf[0][4]>buf[1][4]))
+	res.append(tof(buf[0][4]<buf[1][4]))
+	res.append(tof(buf[0][0]>buf[1][1]))
+	res.append(tof(buf[0][0]<buf[1][2]))
+	res.append(tof(buf[0][0]>buf[1][3]))
+	res.append(tof(buf[0][0]<buf[1][3]))
+	intervals=[5,10,15,30,60]
+	return res
 class Agent():
 	def __init__(self,funds):
 		self.funds=funds
@@ -41,11 +56,14 @@ class Human(Agent):
 			processed+=map(float,[si['open'],si['high'],si['low'],si['adjusted_close'],si['volume']])
 #		processed+=[float(dow)]
 		processed+=expand(float(dow)-1,5)
-		self.buffer.append(processed)
+		#self.buffer.append(processed)
+		self.buffer.insert(0,processed)
 		if len(self.buffer)>=MEMORYSIZE:
-			self.buffer.pop(0)
+			self.buffer.pop()
 			for i in self.buffer:
 				printEvery(i,5)
+			self.obs=buildObs(self.buffer)
+			print self.obs
 		return raw_input()
 class BuyAndHold(Agent):
 	def __init__(self,name,funds):
