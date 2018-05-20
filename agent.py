@@ -77,6 +77,7 @@ class Human(Agent):
 		self.startingFunds=funds
 		self.funds=funds
 		self.buffer=[]
+		self.stockList=[]
 	def decide(self,state):
 		(date,account,info)=state
 		funds=account.funds
@@ -87,6 +88,13 @@ class Human(Agent):
 		for stock in stocks:
 			print stock,stocks[stock]
 			totalStocks+=stocks[stock]
+		if self.stockList==[]:
+			for stock in stocks:
+				self.stockList.append(stock)
+		if len(self.stockList)!=len(info.keys()):
+			for stock in self.stockList:
+				if stock not in info.keys():
+					info[stock]=self.buffer[0][stock]
 		processed=[]
 		for stock in info:
 			print stock,info[stock]
@@ -96,6 +104,7 @@ class Human(Agent):
 		processed+=expand(float(dow)-1,5)
 		#self.buffer.append(processed)
 		self.buffer.insert(0,processed)
+#		self.buffer.insert(0,info)
 		if len(self.buffer)>MEMORYSIZE:
 			self.buffer.pop()
 			for i in self.buffer:
