@@ -6,6 +6,8 @@ class Account():
 		self.name=name
 		self.funds=funds
 		self.stocks=dict()
+		self.trades=0
+		self.commisions=0
 	def buy(self,amount,stock,price):
 		fundsAfter=self.funds-amount*float(price)-commisions
 		if fundsAfter<0:
@@ -14,8 +16,12 @@ class Account():
 			self.stocks[stock]=0
 		self.stocks[stock]+=amount
 		self.funds=fundsAfter
+		self.commisions+=commisions
+		self.trades+=1
 	def sell(self,amount,stock,price):
 		if stock not in self.stocks or self.stocks[stock]==0:
 			return False
 		self.stocks[stock]-=amount
 		self.funds+=amount*float(price)-commisions
+		self.commisions+=commisions
+		self.trades+=1

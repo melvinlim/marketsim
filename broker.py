@@ -35,6 +35,8 @@ class Broker():
 				print 'holdings: '+str(amount)+' shares of '+stock
 		print 'value at start: '+str(account.agent.startingFunds)
 		print 'value at end: '+str(value)
+		print 'trades: '+str(account.trades)
+		print 'commisions: '+str(account.commisions)
 	def removeIrrelevant(self):
 		data=self.data
 		dates=self.dates
