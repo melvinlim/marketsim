@@ -103,9 +103,6 @@ class Human(Agent):
 			print stock,info[stock]
 			si=info[stock]
 			processed.append(map(float,[si['open'],si['high'],si['low'],si['adjusted_close'],si['volume']]))
-#		processed+=[float(dow)]
-#		processed+=expand(float(dow)-1,5)
-		#self.buffer.append(processed)
 		self.processedBuffer.insert(0,processed)
 		self.buffer.insert(0,info)
 		for entry in self.buffer:
@@ -115,6 +112,7 @@ class Human(Agent):
 #			for i in self.buffer:
 #				printEvery(i,5)
 			self.obs=buildObs(self.processedBuffer)
+			self.obs+=expand(float(dow)-1,5)
 			print self.obs
 		return raw_input()
 class Random(Agent):
