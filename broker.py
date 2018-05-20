@@ -23,6 +23,16 @@ class Broker():
 			today=data[dates[i]]
 			i+=1
 		self.dates=dates[i:]
+	def printStats(self,account,today):
+		value=account.funds
+		for stock in account.stocks:
+			amount=float(account.stocks[stock])
+			if stock in today:
+				price=float(today[stock]['adjusted_close'])
+				value+=price*amount
+			else:
+				print 'holdings: '+str(amount)+' shares of '+stock
+		print 'value at end: '+str(value)
 	def removeIrrelevant(self):
 		data=self.data
 		dates=self.dates
@@ -60,3 +70,6 @@ class Broker():
 					else:
 						print 'market data unavailable today'
 #should sell at next available price.
+		for account in self.accounts:
+			finalDay=data[dates[-1]]
+			self.printStats(self.accounts[account],finalDay)

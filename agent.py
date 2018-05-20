@@ -21,8 +21,10 @@ class Human(Agent):
 		stocks=account.stocks
 		dow=getDayOfWeek(strDate(date))
 		print dow,date,funds
+		totalStocks=0
 		for stock in stocks:
 			print stock,stocks[stock]
+			totalStocks+=stocks[stock]
 		processed=[]
 		for stock in info:
 			print stock,info[stock]
@@ -35,3 +37,17 @@ class Human(Agent):
 			for i in self.buffer:
 				printEvery(i,5)
 		return raw_input()
+class BuyAndHold(Agent):
+	def __init__(self,name,funds):
+		self.name=name
+		self.funds=funds
+		self.buffer=[]
+	def decide(self,state):
+		totalStocks=0
+		(date,account,info)=state
+		stocks=account.stocks
+		for stock in stocks:
+			totalStocks+=stocks[stock]
+		if totalStocks==0:
+			return 'b'
+		return '\n'
