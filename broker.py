@@ -1,12 +1,14 @@
 from dayofweek import *
 from account import *
+from agent import *
 class Broker():
-	def __init__(self,accounts,data):
-		self.accounts=dict()
+	def __init__(self,agents,data):
+		self.agents=dict()
 		self.idn=0
-		for account in accounts:
-			name,funds=account
-			self.accounts[self.idn]=Account(self.idn,name,funds)
+		for agent in agents:
+			name=agent.name
+			funds=agent.funds
+			self.agents[self.idn]=Account(self.idn,name,funds)
 			self.idn+=1
 		self.data=data
 		self.dates=data.keys()
@@ -37,11 +39,6 @@ class Broker():
 		dates=self.dates
 		for date in dates:
 			today=data[date]
-#			for stock in today:
-#				d=today[stock].pop('timestamp',None)
-#				assert d==date
-#				for irrelevant in ['split_coefficient','dividend_amount']:
-#					today[stock].pop(irrelevant,None)
 			dow=getDayOfWeek(strDate(date))
 			print dow,strDate(date)
 			for stock in today.keys():
