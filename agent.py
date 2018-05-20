@@ -1,23 +1,8 @@
 from dayofweek import *
+from statistics import *
 import random
-import math
 MEMORYSIZE=60
 WINDOWSZ=30
-def mean(a):
-	n=len(a)
-	res=0
-	for x in a:
-		res+=x
-	res/=float(n)
-	return res
-def stdev(a):
-	n=len(a)
-	res=0
-	m=mean(a)
-	for x in a:
-		res+=(x-m)**2
-	res/=(n-1)
-	return math.sqrt(res)
 def expand(x,n):
 	res=[]
 	for i in range(n):
