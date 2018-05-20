@@ -1,5 +1,13 @@
 from dayofweek import *
 MEMORYSIZE=4
+def expand(x,n):
+	res=[]
+	for i in range(n):
+		if i==x:
+			res.append(1.0)
+		else:
+			res.append(-1.0)
+	return res
 def printEvery(l,x):
 	n=len(l)
 	t=0
@@ -31,7 +39,8 @@ class Human(Agent):
 			print stock,info[stock]
 			si=info[stock]
 			processed+=map(float,[si['open'],si['high'],si['low'],si['adjusted_close'],si['volume']])
-		processed+=[float(dow)]
+#		processed+=[float(dow)]
+		processed+=expand(float(dow)-1,5)
 		self.buffer.append(processed)
 		if len(self.buffer)>=MEMORYSIZE:
 			self.buffer.pop(0)
