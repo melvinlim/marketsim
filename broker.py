@@ -31,7 +31,7 @@ class Broker():
 			for stock in today:
 				d=today[stock].pop('timestamp',None)
 				assert d==date
-				for irrelevant in ['split_coefficient','dividend_amount']:
+				for irrelevant in ['split_coefficient','dividend_amount','close']:
 					today[stock].pop(irrelevant,None)
 	def loop(self):
 		data=self.data
