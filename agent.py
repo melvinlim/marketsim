@@ -107,13 +107,13 @@ class Human(Agent):
 		self.buffer.insert(0,info)
 		for entry in self.buffer:
 			assert(len(entry)==8)
-		if len(self.buffer)>MEMORYSIZE:
-			self.buffer.pop()
+		if len(self.buffer)>=MEMORYSIZE:
 #			for i in self.buffer:
 #				printEvery(i,5)
 			self.obs=buildObs(self.processedBuffer)
 			self.obs+=expand(float(dow)-1,5)
 			print self.obs
+			self.buffer.pop()
 		return raw_input()
 class Random(Agent):
 	def __init__(self,name,funds):
