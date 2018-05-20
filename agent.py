@@ -1,6 +1,23 @@
 from dayofweek import *
 import random
-MEMORYSIZE=5
+import math
+MEMORYSIZE=60
+WINDOWSZ=30
+def mean(a):
+	n=len(a)
+	res=0
+	for x in a:
+		res+=x
+	res/=float(n)
+	return res
+def stdev(a):
+	n=len(a)
+	res=0
+	m=mean(a)
+	for x in a:
+		res+=(x-m)**2
+	res/=(n-1)
+	return math.sqrt(res)
 def expand(x,n):
 	res=[]
 	for i in range(n):
@@ -36,6 +53,20 @@ def buildObs(buf):
 		if (ind)<n:
 			res.append(tof(buf[0][3]>buf[ind][3]))
 			res.append(tof(buf[0][3]<buf[ind][3]))
+	hl=[]
+	vol=[]
+	for i in range(WINDOWSZ):
+		hl.append(buf[i][1]-buf[i][2])
+		vol.append(buf[i][4])
+	hlsd=stdev(hl)*0.318
+	volsd=stdev(vol)*0.318
+	hlm=mean(hl)
+	volm=mean(vol)
+	hl=buf[i][1]-buf[i][2]
+	res.append(tof(hl>(hlm+hlsd)))
+	res.append(tof(hl<(hlm-hlsd)))
+	res.append(tof(buf[0][4]>(volm+volsd)))
+	res.append(tof(buf[0][4]<(volm-volsd)))
 	return res
 class Agent():
 	def __init__(self,funds):
