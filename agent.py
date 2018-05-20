@@ -69,10 +69,10 @@ class Human(Agent):
 		(date,account,info)=state
 		dow=getDayOfWeek(strDate(date))
 		funds=account.funds
-		stocks=account.stocks
+		ownedStocks=account.stocks
 		print dow,date,funds
-		for stock in stocks:
-			print stock,stocks[stock]
+		for stock in ownedStocks:
+			print stock,ownedStocks[stock]
 	def decide(self,state):
 		(date,account,info)=state
 		dow=getDayOfWeek(strDate(date))
@@ -109,9 +109,8 @@ class Random(Agent):
 		self.funds=funds
 		self.buffer=[]
 	def decide(self,state):
-		totalStocks=0
 		(date,account,info)=state
-		stocks=account.stocks
+		ownedStocks=account.stocks
 		r=random.randint(0,2)
 		if r==0:
 			return 'b'
@@ -128,10 +127,9 @@ class BuyAndHold(Agent):
 	def decide(self,state):
 		totalStocks=0
 		(date,account,info)=state
-		stocks=account.stocks
-		for stock in stocks:
-			totalStocks+=stocks[stock]
-#		if totalStocks==0:
-		if True:
+		ownedStocks=account.stocks
+		for stock in ownedStocks:
+			totalStocks+=ownedStocks[stock]
+		if totalStocks<1000:
 			return 'b'
 		return '\n'
