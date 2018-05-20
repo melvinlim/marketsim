@@ -1,4 +1,3 @@
-from dayofweek import *
 from account import *
 from agent import *
 class Broker():
@@ -39,8 +38,6 @@ class Broker():
 		dates=self.dates
 		for date in dates:
 			today=data[date]
-			dow=getDayOfWeek(strDate(date))
-			print dow,strDate(date)
 			for account in self.accounts:
 				agent=self.accounts[account].agent
 				state=(date,self.accounts[account].funds,today)
