@@ -1,4 +1,5 @@
 from dayofweek import *
+MEMORYSIZE=4
 def printEvery(l,x):
 	n=len(l)
 	t=0
@@ -13,6 +14,7 @@ class Human(Agent):
 	def __init__(self,name,funds):
 		self.name=name
 		self.funds=funds
+		self.buffer=[]
 	def decide(self,state):
 		(date,account,info)=state
 		funds=account.funds
@@ -27,5 +29,9 @@ class Human(Agent):
 			si=info[stock]
 			processed+=map(float,[si['open'],si['high'],si['low'],si['adjusted_close'],si['volume']])
 		processed+=[float(dow)]
-		printEvery(processed,5)
+		self.buffer.append(processed)
+		if len(self.buffer)>=MEMORYSIZE:
+			self.buffer.pop(0)
+			for i in self.buffer:
+				printEvery(i,5)
 		return raw_input()
