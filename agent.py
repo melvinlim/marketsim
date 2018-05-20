@@ -62,7 +62,7 @@ def buildObs(buf):
 	volsd=stdev(vol)*0.318
 	hlm=mean(hl)
 	volm=mean(vol)
-	hl=buf[i][1]-buf[i][2]
+	hl=buf[0][1]-buf[0][2]
 	res.append(tof(hl>(hlm+hlsd)))
 	res.append(tof(hl<(hlm-hlsd)))
 	res.append(tof(buf[0][4]>(volm+volsd)))
