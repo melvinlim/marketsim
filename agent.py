@@ -16,4 +16,7 @@ class Human(Agent):
 			print stock,stocks[stock]
 		for stock in info:
 			print stock,info[stock]
+			si=info[stock]
+			processed=map(float,[dow,si['open'],si['high'],si['low'],si['adjusted_close'],si['volume']])
+			print processed
 		return raw_input()
