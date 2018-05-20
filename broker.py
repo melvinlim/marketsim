@@ -33,6 +33,7 @@ class Broker():
 				value+=price*amount
 			else:
 				print 'holdings: '+str(amount)+' shares of '+stock
+		print 'value at start: '+str(account.agent.startingFunds)
 		print 'value at end: '+str(value)
 	def removeIrrelevant(self):
 		data=self.data

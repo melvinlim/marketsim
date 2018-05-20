@@ -13,6 +13,7 @@ class Agent():
 class Human(Agent):
 	def __init__(self,name,funds):
 		self.name=name
+		self.startingFunds=funds
 		self.funds=funds
 		self.buffer=[]
 	def decide(self,state):
@@ -40,6 +41,7 @@ class Human(Agent):
 class BuyAndHold(Agent):
 	def __init__(self,name,funds):
 		self.name=name
+		self.startingFunds=funds
 		self.funds=funds
 		self.buffer=[]
 	def decide(self,state):
