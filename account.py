@@ -1,3 +1,4 @@
+commisions=5	#per trade commisions
 class Account():
 	def __init__(self,idn,agent,name,funds):
 		self.idn=idn
@@ -6,7 +7,7 @@ class Account():
 		self.funds=funds
 		self.stocks=dict()
 	def buy(self,amount,stock,price):
-		fundsAfter=self.funds-amount*float(price)
+		fundsAfter=self.funds-amount*float(price)-commisions
 		if fundsAfter<0:
 			return False
 		if stock not in self.stocks:
@@ -17,4 +18,4 @@ class Account():
 		if stock not in self.stocks or self.stocks[stock]==0:
 			return False
 		self.stocks[stock]-=100
-		self.funds+=amount*float(price)
+		self.funds+=amount*float(price)-commisions
