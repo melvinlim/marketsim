@@ -43,11 +43,13 @@ class Broker():
 			print dow,strDate(date)
 			for account in self.accounts:
 				agent=self.accounts[account].agent
-				action=agent.decide(today)
+				state=(date,self.accounts[account].funds,today)
+				action=agent.decide(state)
 				action.strip('\n')
 				action.strip('\r')
 				stock='XUS.TO'
 				if action=='b':
 					self.accounts[account].buy(100,stock,today[stock]['adjusted_close'])
 				elif action=='s':
+#should use tomorrow's opening price
 					self.accounts[account].sell(100,stock,today[stock]['adjusted_close'])
