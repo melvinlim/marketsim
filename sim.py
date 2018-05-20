@@ -11,7 +11,6 @@ mkey=[0,1,4,4,0,2,5,0,3,6,1,4,6]
 #day of week as number from 0-6.  0=Sunday, 1=Monday.
 def getDayOfWeek(date):
 	year,month,day=date
-	print year,month,day
 	l2d=year%100
 	tmp=l2d/4
 	tmp=tmp+day
@@ -40,6 +39,7 @@ for date in dates:
 		for irrelevant in ['split_coefficient','dividend_amount']:
 			today[stock].pop(irrelevant,None)
 	dow=getDayOfWeek(strDate(date))
+	print dow,strDate(date)
 	for stock in today.keys():
-		print dow,date,strDate(date),stock,today[stock]
+		print stock,today[stock]
 	raw_input()
