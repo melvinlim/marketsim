@@ -26,33 +26,32 @@ def tof(x):
 def buildObs(buf):
 	n=len(buf)
 	res=[]
-	for stk in range(len(buf[0])):
-		res.append(tof(buf[0][stk][4]>buf[1][stk][4]))
-		res.append(tof(buf[0][stk][4]<buf[1][stk][4]))
-		res.append(tof(buf[0][stk][0]>buf[1][stk][1]))
-		res.append(tof(buf[0][stk][0]<buf[1][stk][2]))
-		res.append(tof(buf[0][stk][0]>buf[1][stk][3]))
-		res.append(tof(buf[0][stk][0]<buf[1][stk][3]))
-		intervals=[5,10,15,30,60]
-		for interval in intervals:
-			ind=interval-1
-			if (ind)<n:
-				res.append(tof(buf[0][stk][3]>buf[ind][stk][3]))
-				res.append(tof(buf[0][stk][3]<buf[ind][stk][3]))
-		hl=[]
-		vol=[]
-		for i in range(WINDOWSZ):
-			hl.append(buf[i][stk][1]-buf[i][stk][2])
-			vol.append(buf[i][stk][4])
-		hlsd=stdev(hl)*0.318
-		volsd=stdev(vol)*0.318
-		hlm=mean(hl)
-		volm=mean(vol)
-		hl=buf[0][stk][1]-buf[0][stk][2]
-		res.append(tof(hl>(hlm+hlsd)))
-		res.append(tof(hl<(hlm-hlsd)))
-		res.append(tof(buf[0][stk][4]>(volm+volsd)))
-		res.append(tof(buf[0][stk][4]<(volm-volsd)))
+	res.append(tof(buf[0][4]>buf[1][4]))
+	res.append(tof(buf[0][4]<buf[1][4]))
+	res.append(tof(buf[0][0]>buf[1][1]))
+	res.append(tof(buf[0][0]<buf[1][2]))
+	res.append(tof(buf[0][0]>buf[1][3]))
+	res.append(tof(buf[0][0]<buf[1][3]))
+	intervals=[5,10,15,30,60]
+	for interval in intervals:
+		ind=interval-1
+		if (ind)<n:
+			res.append(tof(buf[0][3]>buf[ind][3]))
+			res.append(tof(buf[0][3]<buf[ind][3]))
+	hl=[]
+	vol=[]
+	for i in range(WINDOWSZ):
+		hl.append(buf[i][1]-buf[i][2])
+		vol.append(buf[i][4])
+	hlsd=stdev(hl)*0.318
+	volsd=stdev(vol)*0.318
+	hlm=mean(hl)
+	volm=mean(vol)
+	hl=buf[0][1]-buf[0][2]
+	res.append(tof(hl>(hlm+hlsd)))
+	res.append(tof(hl<(hlm-hlsd)))
+	res.append(tof(buf[0][4]>(volm+volsd)))
+	res.append(tof(buf[0][4]<(volm-volsd)))
 	return res
 class Agent():
 	def __init__(self,funds):
@@ -70,6 +69,7 @@ class Human(Agent):
 		self.buffer=[]
 		self.processedBuffer=[]
 		self.stockList=[]
+		self.obs=[]
 	def display(self,state):
 		(date,account,info)=state
 		dow=getDayOfWeek(strDate(date))
@@ -85,21 +85,25 @@ class Human(Agent):
 		if self.stockList==[]:
 			for stock in info.keys():
 				self.stockList.append(stock)
+				self.processedBuffer.append([])
 		self.fillGaps(info)
 		assert len(self.stockList)==len(info.keys())
-		processed=[]
+		i=0
 		for stock in info:
 			print stock,info[stock]
 			si=info[stock]
-			processed.append(map(float,[si['open'],si['high'],si['low'],si['adjusted_close'],si['volume']]))
-		self.processedBuffer.insert(0,processed)
+			processed=map(float,[si['open'],si['high'],si['low'],si['adjusted_close'],si['volume']])
+			self.processedBuffer[i].insert(0,processed)
+			i+=1
 		self.buffer.insert(0,info)
 		for entry in self.buffer:
 			assert(len(entry)==8)
 		if len(self.buffer)>=MEMORYSIZE:
 #			for i in self.buffer:
 #				printEvery(i,5)
-			self.obs=buildObs(self.processedBuffer)
+			self.obs=[]
+			for i in range(len(self.stockList)):
+				self.obs+=buildObs(self.processedBuffer[i])
 			self.obs+=expand(float(dow)-1,5)
 			print self.obs
 			self.buffer.pop()
