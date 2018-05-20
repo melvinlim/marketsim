@@ -61,6 +61,14 @@ class Agent():
 			for stock in self.stockList:
 				if stock not in info.keys():
 					info[stock]=buf[0][stock]
+	def updateProcessedBuffer(self,info):
+		i=0
+		for stock in info:
+			print stock,info[stock]
+			si=info[stock]
+			processed=map(float,[si['open'],si['high'],si['low'],si['adjusted_close'],si['volume']])
+			self.processedBuffer[i].insert(0,processed)
+			i+=1
 class Human(Agent):
 	def __init__(self,name,funds):
 		self.name=name
@@ -88,16 +96,10 @@ class Human(Agent):
 				self.processedBuffer.append([])
 		self.fillGaps(info,self.buffer)
 		self.buffer.insert(0,info)
-		assert len(self.stockList)==len(info.keys())
-		i=0
-		for stock in info:
-			print stock,info[stock]
-			si=info[stock]
-			processed=map(float,[si['open'],si['high'],si['low'],si['adjusted_close'],si['volume']])
-			self.processedBuffer[i].insert(0,processed)
-			i+=1
 		for entry in self.buffer:
 			assert(len(entry)==8)
+		assert len(self.stockList)==len(info.keys())
+		self.updateProcessedBuffer(info)
 		if len(self.buffer)>=MEMORYSIZE:
 #			for i in self.buffer:
 #				printEvery(i,5)
