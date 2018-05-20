@@ -46,3 +46,8 @@ class Broker():
 				action=agent.decide(today)
 				action.strip('\n')
 				action.strip('\r')
+				stock='XUS.TO'
+				if action=='b':
+					self.accounts[account].buy(100,stock,today[stock]['adjusted_close'])
+				elif action=='s':
+					self.accounts[account].sell(100,stock,today[stock]['adjusted_close'])
