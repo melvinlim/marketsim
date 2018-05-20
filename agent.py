@@ -7,9 +7,13 @@ class Human(Agent):
 		self.name=name
 		self.funds=funds
 	def decide(self,state):
-		(date,funds,info)=state
+		(date,account,info)=state
+		funds=account.funds
+		stocks=account.stocks
 		dow=getDayOfWeek(strDate(date))
 		print dow,date,funds
+		for stock in stocks:
+			print stock,stocks[stock]
 		for stock in info:
 			print stock,info[stock]
 		return raw_input()

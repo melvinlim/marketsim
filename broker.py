@@ -40,7 +40,7 @@ class Broker():
 			today=data[date]
 			for account in self.accounts:
 				agent=self.accounts[account].agent
-				state=(date,self.accounts[account].funds,today)
+				state=(date,self.accounts[account],today)
 				action=agent.decide(state)
 				action.strip('\n')
 				action.strip('\r')
