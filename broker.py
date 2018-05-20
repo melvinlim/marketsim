@@ -1,6 +1,13 @@
 from dayofweek import *
+from account import *
 class Broker():
-	def __init__(self,data):
+	def __init__(self,accounts,data):
+		self.accounts=dict()
+		self.idn=0
+		for account in accounts:
+			name,funds=account
+			self.accounts[self.idn]=Account(self.idn,name,funds)
+			self.idn+=1
 		self.data=data
 		self.dates=data.keys()
 		self.dates.sort()
