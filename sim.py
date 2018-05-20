@@ -8,5 +8,8 @@ for date in dates:
 	for stock in today:
 		d=today[stock].pop('timestamp',None)
 		assert d==date
-	print today
+		for irrelevant in ['split_coefficient','dividend_amount']:
+			today[stock].pop(irrelevant,None)
+	for stock in today.keys():
+		print stock,today[stock]
 	raw_input()
