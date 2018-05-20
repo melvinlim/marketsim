@@ -3,12 +3,13 @@ from account import *
 from agent import *
 class Broker():
 	def __init__(self,agents,data):
-		self.agents=dict()
+		self.agents=agents
+		self.accounts=dict()
 		self.idn=0
 		for agent in agents:
 			name=agent.name
 			funds=agent.funds
-			self.agents[self.idn]=Account(self.idn,name,funds)
+			self.accounts[self.idn]=Account(self.idn,name,funds)
 			self.idn+=1
 		self.data=data
 		self.dates=data.keys()
@@ -41,6 +42,6 @@ class Broker():
 			today=data[date]
 			dow=getDayOfWeek(strDate(date))
 			print dow,strDate(date)
-			for stock in today.keys():
-				print stock,today[stock]
-			raw_input()
+			for agent in self.agents:
+				action=agent.decide(today)
+				print action
