@@ -56,11 +56,11 @@ def buildObs(buf):
 class Agent():
 	def __init__(self,funds):
 		self.funds=funds
-	def fillGaps(self,info):
+	def fillGaps(self,info,buf):
 		if len(self.stockList)!=len(info.keys()):
 			for stock in self.stockList:
 				if stock not in info.keys():
-					info[stock]=self.buffer[0][stock]
+					info[stock]=buf[0][stock]
 class Human(Agent):
 	def __init__(self,name,funds):
 		self.name=name
@@ -86,7 +86,8 @@ class Human(Agent):
 			for stock in info.keys():
 				self.stockList.append(stock)
 				self.processedBuffer.append([])
-		self.fillGaps(info)
+		self.fillGaps(info,self.buffer)
+		self.buffer.insert(0,info)
 		assert len(self.stockList)==len(info.keys())
 		i=0
 		for stock in info:
@@ -95,7 +96,6 @@ class Human(Agent):
 			processed=map(float,[si['open'],si['high'],si['low'],si['adjusted_close'],si['volume']])
 			self.processedBuffer[i].insert(0,processed)
 			i+=1
-		self.buffer.insert(0,info)
 		for entry in self.buffer:
 			assert(len(entry)==8)
 		if len(self.buffer)>=MEMORYSIZE:
@@ -104,6 +104,7 @@ class Human(Agent):
 			self.obs=[]
 			for i in range(len(self.stockList)):
 				self.obs+=buildObs(self.processedBuffer[i])
+				self.processedBuffer[i].pop()
 			self.obs+=expand(float(dow)-1,5)
 			print self.obs
 			self.buffer.pop()
