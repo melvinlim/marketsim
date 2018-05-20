@@ -88,6 +88,10 @@ class Human(Agent):
 			print stock,ownedStocks[stock]
 	def decide(self,state):
 		(date,account,info)=state
+		ownedStocks=account.stocks
+		totalStocks=0
+		for stock in ownedStocks:
+			totalStocks+=ownedStocks[stock]
 		dow=getDayOfWeek(strDate(date))
 		self.display(state)
 		if self.stockList==[]:
@@ -101,13 +105,12 @@ class Human(Agent):
 		assert len(self.stockList)==len(info.keys())
 		self.updateProcessedBuffer(info)
 		if len(self.buffer)>=MEMORYSIZE:
-#			for i in self.buffer:
-#				printEvery(i,5)
 			self.obs=[]
 			for i in range(len(self.stockList)):
 				self.obs+=buildObs(self.processedBuffer[i])
 				self.processedBuffer[i].pop()
 			self.obs+=expand(float(dow)-1,5)
+			self.obs+=[tof(totalStocks>0)]
 			print self.obs
 			self.buffer.pop()
 		return raw_input()
