@@ -24,6 +24,7 @@ class Broker():
 			i+=1
 		self.dates=dates[i:]
 	def printStats(self,account,today):
+		print 'account: '+account.name
 		value=account.funds
 		for stock in account.stocks:
 			amount=float(account.stocks[stock])

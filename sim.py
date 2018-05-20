@@ -3,7 +3,8 @@ from broker import *
 from agent import *
 md=MarketData('allData.pkl')
 data=md['all']
-#agent=Human('human',20000)
-agent=BuyAndHold('B&H',20000)
-broker=Broker([agent],data)
+agents=[]
+#agents.append(Human('human',20000))
+agents.append(BuyAndHold('B&H',20000))
+broker=Broker(agents,data)
 broker.loop()
