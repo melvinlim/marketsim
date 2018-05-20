@@ -1,4 +1,11 @@
 from dayofweek import *
+def printEvery(l,x):
+	n=len(l)
+	t=0
+	while t+x<n:
+		print l[t:t+x]
+		t+=x
+	print l[t:]
 class Agent():
 	def __init__(self,funds):
 		self.funds=funds
@@ -14,9 +21,11 @@ class Human(Agent):
 		print dow,date,funds
 		for stock in stocks:
 			print stock,stocks[stock]
+		processed=[]
 		for stock in info:
 			print stock,info[stock]
 			si=info[stock]
-			processed=map(float,[dow,si['open'],si['high'],si['low'],si['adjusted_close'],si['volume']])
-			print processed
+			processed+=map(float,[si['open'],si['high'],si['low'],si['adjusted_close'],si['volume']])
+		processed+=[float(dow)]
+		printEvery(processed,5)
 		return raw_input()
