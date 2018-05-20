@@ -57,6 +57,11 @@ def buildObs(buf):
 class Agent():
 	def __init__(self,funds):
 		self.funds=funds
+	def fillGaps(self,info):
+		if len(self.stockList)!=len(info.keys()):
+			for stock in self.stockList:
+				if stock not in info.keys():
+					info[stock]=self.buffer[0][stock]
 class Human(Agent):
 	def __init__(self,name,funds):
 		self.name=name
@@ -80,10 +85,7 @@ class Human(Agent):
 		if self.stockList==[]:
 			for stock in info.keys():
 				self.stockList.append(stock)
-		if len(self.stockList)!=len(info.keys()):
-			for stock in self.stockList:
-				if stock not in info.keys():
-					info[stock]=self.buffer[0][stock]
+		self.fillGaps(info)
 		assert len(self.stockList)==len(info.keys())
 		processed=[]
 		for stock in info:
