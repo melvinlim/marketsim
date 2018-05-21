@@ -112,6 +112,16 @@ class Agent():
 		if DEBUG:
 			print obs
 		return obs
+	def display(self,brokerData):
+		(date,account,marketData)=brokerData
+		dow=getDayOfWeek(strDate(date))
+		funds=account.funds
+		ownedStocks=account.stocks
+		print dow,date,funds
+		print self.totalValue
+		print 'reward: '+str(self.reward)
+		for stock in ownedStocks:
+			print stock,ownedStocks[stock]
 class QAgent(Agent):
 	def __init__(self,name,funds):
 		self.name=name
@@ -124,16 +134,6 @@ class QAgent(Agent):
 		self.state=None
 		self.action=-1
 		self.trained=False
-	def display(self,brokerData):
-		(date,account,marketData)=brokerData
-		dow=getDayOfWeek(strDate(date))
-		funds=account.funds
-		ownedStocks=account.stocks
-		print dow,date,funds
-		print self.totalValue
-		print 'reward: '+str(self.reward)
-		for stock in ownedStocks:
-			print stock,ownedStocks[stock]
 	def decide(self,brokerData):
 		(date,account,marketData)=brokerData
 		if self.stockList==[]:
@@ -195,16 +195,6 @@ class Human(Agent):
 		self.state=None
 		self.action=-1
 		self.trained=False
-	def display(self,brokerData):
-		(date,account,marketData)=brokerData
-		dow=getDayOfWeek(strDate(date))
-		funds=account.funds
-		ownedStocks=account.stocks
-		print dow,date,funds
-		print self.totalValue
-		print 'reward: '+str(self.reward)
-		for stock in ownedStocks:
-			print stock,ownedStocks[stock]
 	def decide(self,brokerData):
 		(date,account,marketData)=brokerData
 		if self.stockList==[]:
