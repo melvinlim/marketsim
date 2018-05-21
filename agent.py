@@ -91,10 +91,10 @@ class Agent():
 		qlearn.storeReward(r)
 		qlearn.storeNextState(*s)
 #		qlearn.printInfo()
-		qlearn.storeInfo()
+		n=qlearn.storeInfo()
 		if DEBUG:
 			qlearn.printRecords()
-		return 0
+		return n
 class Human(Agent):
 	def __init__(self,name,funds):
 		self.name=name
@@ -154,8 +154,9 @@ class Human(Agent):
 			action=raw_input()
 			self.action=getAction(action)
 			if self.prevState!=None:
-				self.updateInfo(self.prevState,self.prevAction,self.reward,self.state)
+				recordLength=self.updateInfo(self.prevState,self.prevAction,self.reward,self.state)
 				if DEBUG:
+					print 'records length: '+str(recordLength)
 					print 'state length: '+str(len(self.prevState))
 		return self.action
 class Random(Agent):
