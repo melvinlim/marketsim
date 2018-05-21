@@ -30,6 +30,8 @@ def getAction(action):
 		return 0
 	elif action=='s':
 		return 1
+	elif action=='q':
+		return -1
 	else:
 		return 2
 def buildObs(buf):

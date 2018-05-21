@@ -68,10 +68,15 @@ class Broker():
 #should use tomorrow's opening price
 					if stock in today:
 						price=today[stock]['adjusted_close']
+#should sell at next available price.
 						self.accounts[account].sell(100,stock,price)
 					else:
 						print 'market data unavailable today'
-#should sell at next available price.
+				elif action==2:
+					pass
+				elif action==-1:
+					return
+	def summary(self):
 		for account in self.accounts:
-			finalDay=data[dates[-1]]
+			finalDay=self.data[self.dates[-1]]
 			self.printStats(self.accounts[account],finalDay)
