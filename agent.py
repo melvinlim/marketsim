@@ -78,6 +78,8 @@ class Agent():
 			processed=map(float,[si['open'],si['high'],si['low'],si['adjusted_close'],si['volume']])
 			self.processedBuffer[i].insert(0,processed)
 			i+=1
+	def updateInfo(self,ps,pa,r,s):
+		return 0
 class Human(Agent):
 	def __init__(self,name,funds):
 		self.name=name
@@ -87,7 +89,7 @@ class Human(Agent):
 		self.processedBuffer=[]
 		self.stockList=[]
 		self.totalValue=funds
-		self.obs=[]
+		self.state=None
 		self.action=-1
 	def display(self,state):
 		(date,account,info)=state
@@ -123,16 +125,20 @@ class Human(Agent):
 		self.prevAction=self.action
 		self.action=''
 		if len(self.buffer)>=MEMORYSIZE:
-			self.obs=[]
+			obs=[]
 			for i in range(len(self.stockList)):
-				self.obs+=buildObs(self.processedBuffer[i])
+				obs+=buildObs(self.processedBuffer[i])
 				self.processedBuffer[i].pop()
-			self.obs+=expand(float(dow)-1,5)
-			self.obs+=[tof(totalStocks>0)]
-			print self.obs
+			obs+=expand(float(dow)-1,5)
+			obs+=[tof(totalStocks>0)]
+			print obs
+			self.prevState=self.state
+			self.state=obs
 			self.buffer.pop()
 			action=raw_input()
 			self.action=getAction(action)
+			if self.prevState!=None:
+				self.updateInfo(self.prevState,self.prevAction,self.reward,self.state)
 		return self.action
 class Random(Agent):
 	def __init__(self,name,funds):
