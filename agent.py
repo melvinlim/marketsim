@@ -23,6 +23,15 @@ def tof(x):
 		return 1.0
 	else:
 		return -1.0
+def getAction(action):
+	action=action.strip('\n')
+	action=action.strip('\r')
+	if action=='b':
+		return 0
+	elif action=='s':
+		return 1
+	else:
+		return 2
 def buildObs(buf):
 	n=len(buf)
 	res=[]
@@ -79,6 +88,7 @@ class Human(Agent):
 		self.stockList=[]
 		self.totalValue=funds
 		self.obs=[]
+		self.action=-1
 	def display(self,state):
 		(date,account,info)=state
 		dow=getDayOfWeek(strDate(date))
@@ -110,6 +120,8 @@ class Human(Agent):
 			assert(len(entry)==8)
 		assert len(self.stockList)==len(info.keys())
 		self.updateProcessedBuffer(info)
+		self.prevAction=self.action
+		self.action=''
 		if len(self.buffer)>=MEMORYSIZE:
 			self.obs=[]
 			for i in range(len(self.stockList)):
@@ -119,8 +131,9 @@ class Human(Agent):
 			self.obs+=[tof(totalStocks>0)]
 			print self.obs
 			self.buffer.pop()
-			return raw_input()
-		return ''
+			action=raw_input()
+			self.action=getAction(action)
+		return self.action
 class Random(Agent):
 	def __init__(self,name,funds):
 		self.name=name
@@ -131,12 +144,7 @@ class Random(Agent):
 		(date,account,info)=state
 		ownedStocks=account.stocks
 		r=random.randint(0,2)
-		if r==0:
-			return 'b'
-		elif r==1:
-			return 's'
-		else:
-			return '\n'
+		return r
 class BuyAndHold(Agent):
 	def __init__(self,name,funds):
 		self.name=name
@@ -150,5 +158,5 @@ class BuyAndHold(Agent):
 		for stock in ownedStocks:
 			totalStocks+=ownedStocks[stock]
 		if totalStocks<1000:
-			return 'b'
-		return '\n'
+			return 0
+		return 2
