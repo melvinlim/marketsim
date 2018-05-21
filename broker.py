@@ -1,7 +1,7 @@
 from account import *
 from agent import *
 class Broker():
-	def __init__(self,agents,data):
+	def __init__(self,agents,marketData):
 		self.accounts=dict()
 		self.idn=0
 		for agent in agents:
@@ -9,18 +9,18 @@ class Broker():
 			funds=agent.funds
 			self.accounts[self.idn]=Account(self.idn,agent,name,funds)
 			self.idn+=1
-		self.data=data
-		self.dates=data.keys()
+		self.marketData=marketData
+		self.dates=marketData.keys()
 		self.dates.sort()
 		self.skip()
 		self.removeIrrelevant()
 	def skip(self):	#skip days prior to XUS.TO's existence.
-		data=self.data
+		marketData=self.marketData
 		dates=self.dates
-		currentData=data[dates[0]]
+		currentData=marketData[dates[0]]
 		i=0
 		while 'XUS.TO' not in currentData:
-			currentData=data[dates[i]]
+			currentData=marketData[dates[i]]
 			i+=1
 		self.dates=dates[i:]
 	def printStats(self,account,currentData):
@@ -38,20 +38,20 @@ class Broker():
 		print 'trades: '+str(account.trades)
 		print 'commisions: '+str(account.commisions)
 	def removeIrrelevant(self):
-		data=self.data
+		marketData=self.marketData
 		dates=self.dates
 		for date in dates:
-			currentData=data[date]
+			currentData=marketData[date]
 			for stock in currentData:
 				d=currentData[stock].pop('timestamp',None)
 				assert d==date
 				for irrelevant in ['split_coefficient','dividend_amount','close']:
 					currentData[stock].pop(irrelevant,None)
 	def loop(self):
-		data=self.data
+		marketData=self.marketData
 		dates=self.dates
 		for date in dates:
-			currentData=data[date]
+			currentData=marketData[date]
 			for account in self.accounts:
 				agent=self.accounts[account].agent
 				state=(date,self.accounts[account],currentData)
@@ -78,5 +78,5 @@ class Broker():
 					return
 	def summary(self):
 		for account in self.accounts:
-			finalDay=self.data[self.dates[-1]]
+			finalDay=self.marketData[self.dates[-1]]
 			self.printStats(self.accounts[account],finalDay)

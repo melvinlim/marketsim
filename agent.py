@@ -6,8 +6,8 @@ from statistics import *
 import random
 MEMORYSIZE=60
 WINDOWSZ=30
-#DEBUG=True
-DEBUG=False
+DEBUG=True
+#DEBUG=False
 def expand(x,n):
 	res=[]
 	for i in range(n):
@@ -72,16 +72,16 @@ def buildObs(buf):
 class Agent():
 	def __init__(self,funds):
 		self.funds=funds
-	def fillGaps(self,stockData,buf):
-		if len(self.stockList)!=len(stockData.keys()):
+	def fillGaps(self,marketData,buf):
+		if len(self.stockList)!=len(marketData.keys()):
 			for stock in self.stockList:
-				if stock not in stockData.keys():
-					stockData[stock]=buf[0][stock]
-	def updateProcessedBuffer(self,stockData):
+				if stock not in marketData.keys():
+					marketData[stock]=buf[0][stock]
+	def updateProcessedBuffer(self,marketData):
 		i=0
-		for stock in stockData:
-			print stock,stockData[stock]
-			si=stockData[stock]
+		for stock in marketData:
+			print stock,marketData[stock]
+			si=marketData[stock]
 			processed=map(float,[si['open'],si['high'],si['low'],si['adjusted_close'],si['volume']])
 			self.processedBuffer[i].insert(0,processed)
 			i+=1
@@ -107,7 +107,7 @@ class Human(Agent):
 		self.state=None
 		self.action=-1
 	def display(self,state):
-		(date,account,stockData)=state
+		(date,account,marketData)=state
 		dow=getDayOfWeek(strDate(date))
 		funds=account.funds
 		ownedStocks=account.stocks
@@ -117,26 +117,26 @@ class Human(Agent):
 		for stock in ownedStocks:
 			print stock,ownedStocks[stock]
 	def decide(self,state):
-		(date,account,stockData)=state
+		(date,account,marketData)=state
 		ownedStocks=account.stocks
 		totalStocks=0
 		for stock in ownedStocks:
 			totalStocks+=ownedStocks[stock]
 		dow=getDayOfWeek(strDate(date))
 		if self.stockList==[]:
-			for stock in stockData.keys():
+			for stock in marketData.keys():
 				self.stockList.append(stock)
 				self.processedBuffer.append([])
-		self.fillGaps(stockData,self.buffer)
+		self.fillGaps(marketData,self.buffer)
 		self.prevTotalValue=self.totalValue
-		self.totalValue=account.totalValue(stockData)
+		self.totalValue=account.totalValue(marketData)
 		self.reward=self.totalValue-self.prevTotalValue
 		self.display(state)
-		self.buffer.insert(0,stockData)
+		self.buffer.insert(0,marketData)
 		for entry in self.buffer:
 			assert(len(entry)==8)
-		assert len(self.stockList)==len(stockData.keys())
-		self.updateProcessedBuffer(stockData)
+		assert len(self.stockList)==len(marketData.keys())
+		self.updateProcessedBuffer(marketData)
 		self.prevAction=self.action
 		self.action=''
 		if len(self.buffer)>=MEMORYSIZE:
@@ -165,7 +165,7 @@ class Random(Agent):
 		self.funds=funds
 		self.buffer=[]
 	def decide(self,state):
-		(date,account,stockData)=state
+		(date,account,marketData)=state
 		ownedStocks=account.stocks
 		r=random.randint(0,2)
 		return r
@@ -177,7 +177,7 @@ class BuyAndHold(Agent):
 		self.buffer=[]
 	def decide(self,state):
 		totalStocks=0
-		(date,account,stockData)=state
+		(date,account,marketData)=state
 		ownedStocks=account.stocks
 		for stock in ownedStocks:
 			totalStocks+=ownedStocks[stock]
