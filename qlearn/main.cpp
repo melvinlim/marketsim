@@ -56,7 +56,7 @@ int game(){
 static PyObject *
 qlearn_getArray(PyObject *self, PyObject *args){
 	float x,y,z;
-	if (!PyArg_ParseTuple(args,"fff",&x,&y,&z))
+	if (!PyArg_ParseTuple(args,"(fff)",&x,&y,&z))
 		return NULL;
 	printf("C++ received: %f %f %f\n",x,y,z);
 	return PyLong_FromLong(0);
