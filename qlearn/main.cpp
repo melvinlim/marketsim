@@ -54,14 +54,14 @@ int game(){
 	return 0;
 }
 static PyObject *qlearn_printInfo(PyObject *self,PyObject *args){
-	printf("state: ");
+	printf("previous state: ");
 	for(int i=0;i<STATEVARS;i++){
 		printf("%f,",info.state[i]);
 	}
 	printf("\n");
 	printf("previous action: %d\n",info.action);
 	printf("reward: %d\n",info.reward);
-	printf("next state: ");
+	printf("state: ");
 	for(int i=0;i<STATEVARS;i++){
 		printf("%f,",info.nextState[i]);
 	}
