@@ -118,7 +118,7 @@ static PyObject *qlearn_storeState(PyObject *self,PyObject *args){
 }
 static PyObject *qlearn_storeInfo(PyObject *self,PyObject *args){
 	gameController.records.push_back(info);
-	int n=gameController.records.size;
+	long n=gameController.records.size;
 	return PyLong_FromLong(n);
 }
 static PyObject *qlearn_game(PyObject *self,PyObject *args){
