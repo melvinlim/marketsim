@@ -171,11 +171,12 @@ class Human(Agent):
 					psse=10
 					sse=5
 					if recordLength==MAXRECORDS:
-						while sse<psse:
-							print psse,sse
-							qlearn.train()
-							psse=sse
-							sse=qlearn.getSumSqErr()
+						qlearn.train()
+#						while sse<psse:
+#							print psse,sse
+#							qlearn.train()
+#							psse=sse
+#							sse=qlearn.getSumSqErr()
 						raw_input()
 						self.trained=True
 			return action

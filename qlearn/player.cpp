@@ -62,6 +62,7 @@ void Agent::decide(const double *state,Action &action){
 				bestQ=tmpQ;
 			}
 		}
+		printf("%f\n",bestQ);
 	}
 	if(currentTime>TRAININGTIME)
 		getchar();
