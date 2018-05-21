@@ -53,6 +53,10 @@ int game(){
 	}
 	return 0;
 }
+static PyObject *qlearn_getSumSqErr(PyObject *self,PyObject *args){
+	player.getSumSqErr(gameController.records);
+	return PyLong_FromLong(0);
+}
 static PyObject *qlearn_train(PyObject *self,PyObject *args){
 	player.train(gameController.records);
 	return PyLong_FromLong(0);
@@ -127,6 +131,8 @@ static PyObject *qlearn_game(PyObject *self,PyObject *args){
 }
 static PyMethodDef QLearnMethods[] = {
     {"train",  qlearn_train, METH_VARARGS,
+     "."},
+    {"getSumSqErr",  qlearn_getSumSqErr, METH_VARARGS,
      "."},
     {"game",  qlearn_game, METH_VARARGS,
      "run game."},

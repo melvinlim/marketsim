@@ -93,8 +93,8 @@ class Agent():
 		qlearn.storeNextState(*s)
 #		qlearn.printInfo()
 		n=qlearn.storeInfo()
-		if DEBUG:
-			qlearn.printRecords()
+#		if DEBUG:
+#			qlearn.printRecords()
 		return n
 	def getState(self,brokerData):
 		(date,account,marketData)=brokerData
@@ -153,9 +153,10 @@ class Human(Agent):
 			self.prevState=self.state
 			self.state=obs
 			self.buffer.pop()
-			action=raw_input()
+			#action=raw_input()
 			self.prevAction=self.action
-			self.action=getAction(action)
+			#self.action=getAction(action)
+			self.action=random.randint(0,2)
 			if self.prevState!=None:
 				recordLength=self.updateInfo(self.prevState,self.prevAction,self.reward,self.state)
 				if DEBUG:
@@ -163,6 +164,8 @@ class Human(Agent):
 					print 'state length: '+str(len(self.prevState))
 				if recordLength==MAXRECORDS:
 					qlearn.train()
+					qlearn.getSumSqErr()
+					raw_input()
 		return action
 class Random(Agent):
 	def __init__(self,name,funds):
