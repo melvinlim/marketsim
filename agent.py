@@ -146,21 +146,21 @@ class Human(Agent):
 		self.buffer.insert(0,marketData)
 		assert len(self.stockList)==len(marketData.keys())
 		self.updateProcessedBuffer(marketData)
-		self.prevAction=self.action
-		self.action=''
+		action=2
 		if len(self.buffer)>=MEMORYSIZE:
 			obs=self.getState(brokerData)
 			self.prevState=self.state
 			self.state=obs
 			self.buffer.pop()
 			action=raw_input()
+			self.prevAction=self.action
 			self.action=getAction(action)
 			if self.prevState!=None:
 				recordLength=self.updateInfo(self.prevState,self.prevAction,self.reward,self.state)
 				if DEBUG:
 					print 'records length: '+str(recordLength)
 					print 'state length: '+str(len(self.prevState))
-		return self.action
+		return action
 class Random(Agent):
 	def __init__(self,name,funds):
 		self.name=name
