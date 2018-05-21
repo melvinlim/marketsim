@@ -6,13 +6,13 @@
 #include<time.h>
 GameController gameController;
 Info info;
+#ifdef HUMAN
+Human player;
+#else
+Agent player;
+#endif
 int game(){
 	time_t startTime,endTime;
-	#ifdef HUMAN
-		Human player;
-	#else
-		Agent player;
-	#endif
 	info.reward=0;
 	memset(info.state,0,sizeof(double)*STATEVARS);
 	unsigned long t=0;
@@ -52,6 +52,10 @@ int game(){
 		gameController.end();
 	}
 	return 0;
+}
+static PyObject *qlearn_printRecords(PyObject *self,PyObject *args){
+	player.verifyRecords(gameController.records);
+	return PyLong_FromLong(0);
 }
 static PyObject *qlearn_printInfo(PyObject *self,PyObject *args){
 	printf("previous state: ");
@@ -119,6 +123,8 @@ static PyObject *qlearn_game(PyObject *self,PyObject *args){
 static PyMethodDef QLearnMethods[] = {
     {"game",  qlearn_game, METH_VARARGS,
      "run game."},
+    {"printRecords",  qlearn_printRecords, METH_VARARGS,
+     "."},
     {"printInfo",  qlearn_printInfo, METH_VARARGS,
      "."},
     {"storeNextState",  qlearn_storeNextState, METH_VARARGS,

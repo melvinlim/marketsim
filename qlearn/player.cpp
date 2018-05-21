@@ -137,8 +137,7 @@ void Player::verifyRecords(Stack<Info> &records){
 	for(int i=0;i<records.size;i++){
 		r++;
 		info=records.atIndex(i);
-		printf("%d: %d\n",r,info.action);
-		printf("reward: %f\n",info.reward);
+		printf("record: %d\n",r);
 		k=0;
 		for(int i=0;i<VISIONY;i++){
 			for(int j=0;j<VISIONX;j++){
@@ -149,6 +148,21 @@ void Player::verifyRecords(Stack<Info> &records){
 		for(int i=0;i<VISIONY;i++){
 			for(int j=0;j<VISIONX;j++){
 				printf("%+f,",info.state[k++]);
+			}
+			printf("\n");
+		}
+		printf("action: %d\n",info.action);
+		printf("reward: %f\n",info.reward);
+		k=0;
+		for(int i=0;i<VISIONY;i++){
+			for(int j=0;j<VISIONX;j++){
+				printf("%+f,",info.nextState[k++]);
+			}
+			printf("\n");
+		}
+		for(int i=0;i<VISIONY;i++){
+			for(int j=0;j<VISIONX;j++){
+				printf("%+f,",info.nextState[k++]);
 			}
 			printf("\n");
 		}
