@@ -150,7 +150,8 @@ class Human(Agent):
 		self.updateProcessedBuffer(marketData)
 		if self.trained:
 			state=self.getState(brokerData)
-			qlearn.decide(*state)
+			action=qlearn.decide(*state)
+			print 'decision:'+str(action)
 		else:
 			action=random.randint(0,2)
 			if len(self.buffer)>=MEMORYSIZE:

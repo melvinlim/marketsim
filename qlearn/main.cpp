@@ -32,8 +32,10 @@ static PyObject *qlearn_decide(PyObject *self,PyObject *args){
 		state[i]=x;
 	}
 	player.decide(state,action);
+	long res=action;
+	printf("decision: %l\n",res);
 //	player.decide(const double *state,Action action);
-	return PyLong_FromLong(0);
+	return PyLong_FromLong(res);
 }
 static PyObject *qlearn_train(PyObject *self,PyObject *args){
 	player.train(gameController.records);
