@@ -55,14 +55,16 @@ int game(){
 }
 #include<stdarg.h>
 static PyObject *
-qlearn_listToState(PyObject *self, PyObject *args){
+qlearn_listToState(PyObject *self,PyObject *args){
 	float x;
 	PyObject *tmp;
 	Py_ssize_t sz=PyTuple_Size(args);
 	printf("C++ received: ");
 	for(Py_ssize_t i=0;i<sz;i++){
 		tmp=PyTuple_GetItem(args,i);
+		if(tmp==0)	return 0;
 		tmp=PyNumber_Float(tmp);
+		if(tmp==0)	return 0;
 		x=PyFloat_AsDouble(tmp);
 		printf("%f,",x);
 	}
@@ -70,42 +72,15 @@ qlearn_listToState(PyObject *self, PyObject *args){
 	return PyLong_FromLong(0);
 }
 static PyObject *
-qlearn_getArray(PyObject *self,PyObject *args){
-	float x,y,z;
-	if (!PyArg_ParseTuple(args,"(fff)",&x,&y,&z))
-		return NULL;
-	printf("C++ received: %f %f %f\n",x,y,z);
-	return PyLong_FromLong(0);
-}
-static PyObject *QLearnError;
-static PyObject *
-qlearn_game(PyObject *self, PyObject *args){
+qlearn_game(PyObject *self,PyObject *args){
 	game();
 	return PyLong_FromLong(0);
 }
-static PyObject *
-qlearn_system(PyObject *self, PyObject *args)
-{
-    const char *command;
-    int sts;
-    if (!PyArg_ParseTuple(args, "s", &command))
-        return NULL;
-    sts = system(command);
-    if (sts < 0) {
-        PyErr_SetString(QLearnError, "System command failed");
-        return NULL;
-    }
-    return PyLong_FromLong(sts);
-}
 static PyMethodDef QLearnMethods[] = {
-    {"system",  qlearn_system, METH_VARARGS,
-     "Execute a shell command."},
     {"game",  qlearn_game, METH_VARARGS,
      "run game."},
     {"listToState",  qlearn_listToState, METH_VARARGS,
      "."},
-    {"getArray",  qlearn_getArray, METH_VARARGS,
-     "pass an array."},
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
 PyMODINIT_FUNC
@@ -116,10 +91,6 @@ initqlearn(void)
     m = Py_InitModule("qlearn", QLearnMethods);
     if (m == NULL)
         return;
-
-    QLearnError = PyErr_NewException("qlearn.error", NULL, NULL);
-    Py_INCREF(QLearnError);
-    PyModule_AddObject(m, "error", QLearnError);
 }
 int main(int argc,char *argv[]){
 	/* Pass argv[0] to the Python interpreter */
