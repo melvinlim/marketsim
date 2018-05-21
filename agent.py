@@ -4,6 +4,7 @@ import qlearn
 from dayofweek import *
 from statistics import *
 import random
+MAXRECORDS=1000	#this is defined as MEMORYSIZE in qlearn/defs.h
 MEMORYSIZE=60
 WINDOWSZ=30
 DEBUG=True
@@ -160,6 +161,8 @@ class Human(Agent):
 				if DEBUG:
 					print 'records length: '+str(recordLength)
 					print 'state length: '+str(len(self.prevState))
+				if recordLength==MAXRECORDS:
+					qlearn.train()
 		return action
 class Random(Agent):
 	def __init__(self,name,funds):

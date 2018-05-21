@@ -53,6 +53,10 @@ int game(){
 	}
 	return 0;
 }
+static PyObject *qlearn_train(PyObject *self,PyObject *args){
+	player.train(gameController.records);
+	return PyLong_FromLong(0);
+}
 static PyObject *qlearn_printRecords(PyObject *self,PyObject *args){
 	player.verifyRecords(gameController.records);
 	return PyLong_FromLong(0);
@@ -122,6 +126,8 @@ static PyObject *qlearn_game(PyObject *self,PyObject *args){
 	return PyLong_FromLong(0);
 }
 static PyMethodDef QLearnMethods[] = {
+    {"train",  qlearn_train, METH_VARARGS,
+     "."},
     {"game",  qlearn_game, METH_VARARGS,
      "run game."},
     {"printRecords",  qlearn_printRecords, METH_VARARGS,
