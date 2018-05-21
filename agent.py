@@ -77,6 +77,7 @@ class Human(Agent):
 		self.buffer=[]
 		self.processedBuffer=[]
 		self.stockList=[]
+		self.totalValue=funds
 		self.obs=[]
 	def display(self,state):
 		(date,account,info)=state
@@ -84,7 +85,8 @@ class Human(Agent):
 		funds=account.funds
 		ownedStocks=account.stocks
 		print dow,date,funds
-		print account.totalValue(info)
+		print self.totalValue
+		print 'reward: '+str(self.reward)
 		for stock in ownedStocks:
 			print stock,ownedStocks[stock]
 	def decide(self,state):
@@ -99,6 +101,9 @@ class Human(Agent):
 				self.stockList.append(stock)
 				self.processedBuffer.append([])
 		self.fillGaps(info,self.buffer)
+		self.prevTotalValue=self.totalValue
+		self.totalValue=account.totalValue(info)
+		self.reward=self.totalValue-self.prevTotalValue
 		self.display(state)
 		self.buffer.insert(0,info)
 		for entry in self.buffer:
