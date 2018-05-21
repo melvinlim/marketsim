@@ -25,3 +25,10 @@ class Account():
 		self.funds+=amount*float(price)-commisions
 		self.commisions+=commisions
 		self.trades+=1
+	def totalValue(self,info):
+		value=self.funds
+		for stock in self.stocks:
+			amount=float(self.stocks[stock])
+			price=float(info[stock]['adjusted_close'])
+			value+=amount*price
+		return value

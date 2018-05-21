@@ -84,6 +84,7 @@ class Human(Agent):
 		funds=account.funds
 		ownedStocks=account.stocks
 		print dow,date,funds
+		print account.totalValue(info)
 		for stock in ownedStocks:
 			print stock,ownedStocks[stock]
 	def decide(self,state):
@@ -93,12 +94,12 @@ class Human(Agent):
 		for stock in ownedStocks:
 			totalStocks+=ownedStocks[stock]
 		dow=getDayOfWeek(strDate(date))
-		self.display(state)
 		if self.stockList==[]:
 			for stock in info.keys():
 				self.stockList.append(stock)
 				self.processedBuffer.append([])
 		self.fillGaps(info,self.buffer)
+		self.display(state)
 		self.buffer.insert(0,info)
 		for entry in self.buffer:
 			assert(len(entry)==8)
