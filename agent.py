@@ -6,6 +6,8 @@ from statistics import *
 import random
 MEMORYSIZE=60
 WINDOWSZ=30
+#DEBUG=True
+DEBUG=False
 def expand(x,n):
 	res=[]
 	for i in range(n):
@@ -88,9 +90,10 @@ class Agent():
 		qlearn.storeAction(pa)
 		qlearn.storeReward(r)
 		qlearn.storeNextState(*s)
-		qlearn.printInfo()
+#		qlearn.printInfo()
 		qlearn.storeInfo()
-		qlearn.printRecords()
+		if DEBUG:
+			qlearn.printRecords()
 		return 0
 class Human(Agent):
 	def __init__(self,name,funds):
@@ -143,7 +146,8 @@ class Human(Agent):
 				self.processedBuffer[i].pop()
 			obs+=expand(float(dow)-1,5)
 			obs+=[tof(totalStocks>0)]
-			print obs
+			if DEBUG:
+				print obs
 			self.prevState=self.state
 			self.state=obs
 			self.buffer.pop()
@@ -151,7 +155,8 @@ class Human(Agent):
 			self.action=getAction(action)
 			if self.prevState!=None:
 				self.updateInfo(self.prevState,self.prevAction,self.reward,self.state)
-				print len(self.prevState)
+				if DEBUG:
+					print 'state length: '+str(len(self.prevState))
 		return self.action
 class Random(Agent):
 	def __init__(self,name,funds):
