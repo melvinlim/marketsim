@@ -72,7 +72,15 @@ def buildObs(buf):
 	return res
 class Agent():
 	def __init__(self,funds):
+		self.startingFunds=funds
 		self.funds=funds
+		self.buffer=[]
+		self.processedBuffer=[]
+		self.stockList=[]
+		self.totalValue=funds
+		self.state=None
+		self.action=-1
+		self.trained=False
 	def fillGaps(self,marketData,buf):
 		if len(self.stockList)!=len(marketData.keys()):
 			for stock in self.stockList:
@@ -125,15 +133,7 @@ class Agent():
 class QAgent(Agent):
 	def __init__(self,name,funds):
 		self.name=name
-		self.startingFunds=funds
-		self.funds=funds
-		self.buffer=[]
-		self.processedBuffer=[]
-		self.stockList=[]
-		self.totalValue=funds
-		self.state=None
-		self.action=-1
-		self.trained=False
+		Agent.__init__(self,funds)
 	def decide(self,brokerData):
 		(date,account,marketData)=brokerData
 		if self.stockList==[]:
@@ -186,15 +186,7 @@ class QAgent(Agent):
 class Human(Agent):
 	def __init__(self,name,funds):
 		self.name=name
-		self.startingFunds=funds
-		self.funds=funds
-		self.buffer=[]
-		self.processedBuffer=[]
-		self.stockList=[]
-		self.totalValue=funds
-		self.state=None
-		self.action=-1
-		self.trained=False
+		Agent.__init__(self,funds)
 	def decide(self,brokerData):
 		(date,account,marketData)=brokerData
 		if self.stockList==[]:
@@ -247,9 +239,7 @@ class Human(Agent):
 class Random(Agent):
 	def __init__(self,name,funds):
 		self.name=name
-		self.startingFunds=funds
-		self.funds=funds
-		self.buffer=[]
+		Agent.__init__(self,funds)
 	def decide(self,brokerData):
 		(date,account,marketData)=brokerData
 		ownedStocks=account.stocks
@@ -258,9 +248,7 @@ class Random(Agent):
 class BuyAndHold(Agent):
 	def __init__(self,name,funds):
 		self.name=name
-		self.startingFunds=funds
-		self.funds=funds
-		self.buffer=[]
+		Agent.__init__(self,funds)
 	def decide(self,brokerData):
 		totalStocks=0
 		(date,account,marketData)=brokerData
