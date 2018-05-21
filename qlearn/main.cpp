@@ -54,12 +54,18 @@ int game(){
 	return 0;
 }
 static PyObject *qlearn_printInfo(PyObject *self,PyObject *args){
-	printf("\naction: %d\n",info.action);
 	printf("state: ");
 	for(int i=0;i<STATEVARS;i++){
 		printf("%f,",info.state[i]);
 	}
-	printf("\nreward: %d\n",info.reward);
+	printf("\n");
+	printf("previous action: %d\n",info.action);
+	printf("reward: %d\n",info.reward);
+	printf("next state: ");
+	for(int i=0;i<STATEVARS;i++){
+		printf("%f,",info.nextState[i]);
+	}
+	printf("\n");
 	return PyLong_FromLong(0);
 }
 static PyObject *qlearn_storeReward(PyObject *self,PyObject *args){
@@ -74,11 +80,24 @@ static PyObject *qlearn_storeAction(PyObject *self,PyObject *args){
 	info.action=x;
 	return PyLong_FromLong(0);
 }
+static PyObject *qlearn_storeNextState(PyObject *self,PyObject *args){
+	float x;
+	PyObject *tmp;
+	Py_ssize_t sz=PyTuple_Size(args);
+	for(Py_ssize_t i=0;i<sz;i++){
+		tmp=PyTuple_GetItem(args,i);
+		if(tmp==0)	return 0;
+		tmp=PyNumber_Float(tmp);
+		if(tmp==0)	return 0;
+		x=PyFloat_AsDouble(tmp);
+		info.nextState[i]=x;
+	}
+	return PyLong_FromLong(0);
+}
 static PyObject *qlearn_storeState(PyObject *self,PyObject *args){
 	float x;
 	PyObject *tmp;
 	Py_ssize_t sz=PyTuple_Size(args);
-	printf("C++ received: ");
 	for(Py_ssize_t i=0;i<sz;i++){
 		tmp=PyTuple_GetItem(args,i);
 		if(tmp==0)	return 0;
@@ -86,9 +105,7 @@ static PyObject *qlearn_storeState(PyObject *self,PyObject *args){
 		if(tmp==0)	return 0;
 		x=PyFloat_AsDouble(tmp);
 		info.state[i]=x;
-		printf("%f,",x);
 	}
-	printf("\n");
 	return PyLong_FromLong(0);
 }
 static PyObject *qlearn_game(PyObject *self,PyObject *args){
@@ -99,6 +116,8 @@ static PyMethodDef QLearnMethods[] = {
     {"game",  qlearn_game, METH_VARARGS,
      "run game."},
     {"printInfo",  qlearn_printInfo, METH_VARARGS,
+     "."},
+    {"storeNextState",  qlearn_storeNextState, METH_VARARGS,
      "."},
     {"storeState",  qlearn_storeState, METH_VARARGS,
      "."},
