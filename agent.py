@@ -123,6 +123,7 @@ class Human(Agent):
 		self.totalValue=funds
 		self.state=None
 		self.action=-1
+		self.trained=False
 	def display(self,brokerData):
 		(date,account,marketData)=brokerData
 		dow=getDayOfWeek(strDate(date))
