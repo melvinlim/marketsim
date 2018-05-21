@@ -72,16 +72,16 @@ def buildObs(buf):
 class Agent():
 	def __init__(self,funds):
 		self.funds=funds
-	def fillGaps(self,info,buf):
-		if len(self.stockList)!=len(info.keys()):
+	def fillGaps(self,stockData,buf):
+		if len(self.stockList)!=len(stockData.keys()):
 			for stock in self.stockList:
-				if stock not in info.keys():
-					info[stock]=buf[0][stock]
-	def updateProcessedBuffer(self,info):
+				if stock not in stockData.keys():
+					stockData[stock]=buf[0][stock]
+	def updateProcessedBuffer(self,stockData):
 		i=0
-		for stock in info:
-			print stock,info[stock]
-			si=info[stock]
+		for stock in stockData:
+			print stock,stockData[stock]
+			si=stockData[stock]
 			processed=map(float,[si['open'],si['high'],si['low'],si['adjusted_close'],si['volume']])
 			self.processedBuffer[i].insert(0,processed)
 			i+=1
@@ -107,7 +107,7 @@ class Human(Agent):
 		self.state=None
 		self.action=-1
 	def display(self,state):
-		(date,account,info)=state
+		(date,account,stockData)=state
 		dow=getDayOfWeek(strDate(date))
 		funds=account.funds
 		ownedStocks=account.stocks
@@ -117,26 +117,26 @@ class Human(Agent):
 		for stock in ownedStocks:
 			print stock,ownedStocks[stock]
 	def decide(self,state):
-		(date,account,info)=state
+		(date,account,stockData)=state
 		ownedStocks=account.stocks
 		totalStocks=0
 		for stock in ownedStocks:
 			totalStocks+=ownedStocks[stock]
 		dow=getDayOfWeek(strDate(date))
 		if self.stockList==[]:
-			for stock in info.keys():
+			for stock in stockData.keys():
 				self.stockList.append(stock)
 				self.processedBuffer.append([])
-		self.fillGaps(info,self.buffer)
+		self.fillGaps(stockData,self.buffer)
 		self.prevTotalValue=self.totalValue
-		self.totalValue=account.totalValue(info)
+		self.totalValue=account.totalValue(stockData)
 		self.reward=self.totalValue-self.prevTotalValue
 		self.display(state)
-		self.buffer.insert(0,info)
+		self.buffer.insert(0,stockData)
 		for entry in self.buffer:
 			assert(len(entry)==8)
-		assert len(self.stockList)==len(info.keys())
-		self.updateProcessedBuffer(info)
+		assert len(self.stockList)==len(stockData.keys())
+		self.updateProcessedBuffer(stockData)
 		self.prevAction=self.action
 		self.action=''
 		if len(self.buffer)>=MEMORYSIZE:
@@ -165,7 +165,7 @@ class Random(Agent):
 		self.funds=funds
 		self.buffer=[]
 	def decide(self,state):
-		(date,account,info)=state
+		(date,account,stockData)=state
 		ownedStocks=account.stocks
 		r=random.randint(0,2)
 		return r
@@ -177,7 +177,7 @@ class BuyAndHold(Agent):
 		self.buffer=[]
 	def decide(self,state):
 		totalStocks=0
-		(date,account,info)=state
+		(date,account,stockData)=state
 		ownedStocks=account.stocks
 		for stock in ownedStocks:
 			totalStocks+=ownedStocks[stock]

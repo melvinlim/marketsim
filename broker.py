@@ -17,19 +17,19 @@ class Broker():
 	def skip(self):	#skip days prior to XUS.TO's existence.
 		data=self.data
 		dates=self.dates
-		today=data[dates[0]]
+		currentData=data[dates[0]]
 		i=0
-		while len(today)!=8:
-			today=data[dates[i]]
+		while len(currentData)!=8:
+			currentData=data[dates[i]]
 			i+=1
 		self.dates=dates[i:]
-	def printStats(self,account,today):
+	def printStats(self,account,currentData):
 		print 'account: '+account.name
 		value=account.funds
 		for stock in account.stocks:
 			amount=float(account.stocks[stock])
-			if stock in today:
-				price=float(today[stock]['adjusted_close'])
+			if stock in currentData:
+				price=float(currentData[stock]['adjusted_close'])
 				value+=price*amount
 			else:
 				print 'holdings: '+str(amount)+' shares of '+stock
@@ -41,33 +41,33 @@ class Broker():
 		data=self.data
 		dates=self.dates
 		for date in dates:
-			today=data[date]
-			for stock in today:
-				d=today[stock].pop('timestamp',None)
+			currentData=data[date]
+			for stock in currentData:
+				d=currentData[stock].pop('timestamp',None)
 				assert d==date
 				for irrelevant in ['split_coefficient','dividend_amount','close']:
-					today[stock].pop(irrelevant,None)
+					currentData[stock].pop(irrelevant,None)
 	def loop(self):
 		data=self.data
 		dates=self.dates
 		for date in dates:
-			today=data[date]
+			currentData=data[date]
 			for account in self.accounts:
 				agent=self.accounts[account].agent
-				state=(date,self.accounts[account],today)
+				state=(date,self.accounts[account],currentData)
 				action=agent.decide(state)
 				stock='XUS.TO'
 				if action==0:
-					if stock in today:
-						price=today[stock]['adjusted_close']
+					if stock in currentData:
+						price=currentData[stock]['adjusted_close']
 						self.accounts[account].buy(100,stock,price)
 					else:
 						print 'market data unavailable today'
 #should sell at next available price.
 				elif action==1:
 #should use tomorrow's opening price
-					if stock in today:
-						price=today[stock]['adjusted_close']
+					if stock in currentData:
+						price=currentData[stock]['adjusted_close']
 #should sell at next available price.
 						self.accounts[account].sell(100,stock,price)
 					else:
