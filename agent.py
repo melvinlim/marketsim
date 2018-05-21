@@ -162,9 +162,14 @@ class Human(Agent):
 				if DEBUG:
 					print 'records length: '+str(recordLength)
 					print 'state length: '+str(len(self.prevState))
+				psse=10
+				sse=5
 				if recordLength==MAXRECORDS:
-					qlearn.train()
-					qlearn.getSumSqErr()
+					while sse<psse:
+						print psse,sse
+						qlearn.train()
+						psse=sse
+						sse=qlearn.getSumSqErr()
 					raw_input()
 		return action
 class Random(Agent):

@@ -66,7 +66,7 @@ void Agent::decide(const double *state,Action &action){
 	if(currentTime>TRAININGTIME)
 		getchar();
 }
-void Agent::getSumSqErr(Stack<Info> &records){
+double Agent::getSumSqErr(Stack<Info> &records){
 	Info info;
 	info=records.back();
 	double Q;
@@ -93,8 +93,10 @@ void Agent::getSumSqErr(Stack<Info> &records){
 		currentError=qptr->getSqErr(info.state,info.action,targetQ);
 		sse+=currentError;
 	}
-	printf("sse:%f\n",sse/(double)records.size);
-	//printf("%x sse:%f\n",qptr,sse/(double)BATCHSIZE);
+	sse/=(double)records.size;
+	printf("sse:%f\n",sse);
+	//printf("%x sse:%f\n",qptr,sse);
+	return sse;
 }
 void Agent::train(Stack<Info> &records){
 	//verifyRecords(records);

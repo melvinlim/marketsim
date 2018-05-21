@@ -54,8 +54,10 @@ int game(){
 	return 0;
 }
 static PyObject *qlearn_getSumSqErr(PyObject *self,PyObject *args){
-	player.getSumSqErr(gameController.records);
-	return PyLong_FromLong(0);
+	double x;
+	x=player.getSumSqErr(gameController.records);
+	return PyFloat_FromDouble(x);
+//	return PyLong_FromLong(0);
 }
 static PyObject *qlearn_train(PyObject *self,PyObject *args){
 	player.train(gameController.records);
