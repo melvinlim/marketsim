@@ -133,8 +133,6 @@ class Human(Agent):
 		self.reward=self.totalValue-self.prevTotalValue
 		self.display(state)
 		self.buffer.insert(0,marketData)
-		for entry in self.buffer:
-			assert(len(entry)==8)
 		assert len(self.stockList)==len(marketData.keys())
 		self.updateProcessedBuffer(marketData)
 		self.prevAction=self.action
