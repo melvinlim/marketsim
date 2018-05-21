@@ -149,7 +149,8 @@ class Human(Agent):
 		assert len(self.stockList)==len(marketData.keys())
 		self.updateProcessedBuffer(marketData)
 		if self.trained:
-			pass
+			state=self.getState(brokerData)
+			qlearn.decide(*state)
 		else:
 			action=random.randint(0,2)
 			if len(self.buffer)>=MEMORYSIZE:

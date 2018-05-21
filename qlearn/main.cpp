@@ -11,53 +11,29 @@ Human player;
 #else
 Agent player;
 #endif
-int game(){
-	time_t startTime,endTime;
-	info.reward=0;
-	memset(info.state,0,sizeof(double)*STATEVARS);
-	unsigned long t=0;
-	int i=0;
-	time(&startTime);
-	for(;;){
-		gameController.reset();
-		gameController.start();
-		gameController.updateState();
-		while(gameController.running){
-			t++;
-			i++;
-			if(t>TRAININGTIME){
-				time(&endTime);
-				gameController.displayOutput=true;
-				printf("training time: %d\n",(int)difftime(endTime,startTime));
-				printf("t: %d\n",gameController.t);
-				gameController.display();
-			}
-			gameController.getState(info.state);
-			player.decide(info.state,info.action);
-			info.reward=gameController.step(info.action);
-			gameController.updateState();
-			if(info.reward!=0){	//if the game is over.
-				memset(info.nextState,0,sizeof(double)*STATEVARS);
-			}else{
-				gameController.getState(info.nextState);
-			}
-			gameController.records.push_back(info);
-			if(i>=MEMORYSIZE){
-				player.train(gameController.records);
-				player.getSumSqErr(gameController.records);
-				gameController.records.clear();
-				i=0;
-			}
-		}
-		gameController.end();
-	}
-	return 0;
-}
 static PyObject *qlearn_getSumSqErr(PyObject *self,PyObject *args){
 	double x;
 	x=player.getSumSqErr(gameController.records);
 	return PyFloat_FromDouble(x);
-//	return PyLong_FromLong(0);
+}
+static PyObject *qlearn_decide(PyObject *self,PyObject *args){
+	player.currentTime=TRAININGTIME;
+	double x;
+	double state[STATEVARS];
+	Action action;
+	PyObject *tmp;
+	Py_ssize_t sz=PyTuple_Size(args);
+	for(Py_ssize_t i=0;i<sz;i++){
+		tmp=PyTuple_GetItem(args,i);
+		if(tmp==0)	return 0;
+		tmp=PyNumber_Float(tmp);
+		if(tmp==0)	return 0;
+		x=PyFloat_AsDouble(tmp);
+		state[i]=x;
+	}
+	player.decide(state,action);
+//	player.decide(const double *state,Action action);
+	return PyLong_FromLong(0);
 }
 static PyObject *qlearn_train(PyObject *self,PyObject *args){
 	player.train(gameController.records);
@@ -95,7 +71,7 @@ static PyObject *qlearn_storeAction(PyObject *self,PyObject *args){
 	return PyLong_FromLong(0);
 }
 static PyObject *qlearn_storeNextState(PyObject *self,PyObject *args){
-	float x;
+	double x;
 	PyObject *tmp;
 	Py_ssize_t sz=PyTuple_Size(args);
 	for(Py_ssize_t i=0;i<sz;i++){
@@ -109,7 +85,7 @@ static PyObject *qlearn_storeNextState(PyObject *self,PyObject *args){
 	return PyLong_FromLong(0);
 }
 static PyObject *qlearn_storeState(PyObject *self,PyObject *args){
-	float x;
+	double x;
 	PyObject *tmp;
 	Py_ssize_t sz=PyTuple_Size(args);
 	for(Py_ssize_t i=0;i<sz;i++){
@@ -127,17 +103,13 @@ static PyObject *qlearn_storeInfo(PyObject *self,PyObject *args){
 	long n=gameController.records.size;
 	return PyLong_FromLong(n);
 }
-static PyObject *qlearn_game(PyObject *self,PyObject *args){
-	game();
-	return PyLong_FromLong(0);
-}
 static PyMethodDef QLearnMethods[] = {
+    {"decide",  qlearn_decide, METH_VARARGS,
+     "."},
     {"train",  qlearn_train, METH_VARARGS,
      "."},
     {"getSumSqErr",  qlearn_getSumSqErr, METH_VARARGS,
      "."},
-    {"game",  qlearn_game, METH_VARARGS,
-     "run game."},
     {"printRecords",  qlearn_printRecords, METH_VARARGS,
      "."},
     {"printInfo",  qlearn_printInfo, METH_VARARGS,
