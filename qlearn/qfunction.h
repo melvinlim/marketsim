@@ -2,6 +2,7 @@
 #define _QFUNCTION_H
 #include"defs.h"
 #include"mynn/net.h"
+#include"mynn/idx.h"
 #include"array.h"
 #include<stdio.h>
 #include<stdlib.h>
@@ -26,5 +27,7 @@ public:
 	Array<double> *actionStateArray;
 	Array<double> *targetArray;
 	void updateActionStateArray(const double *,const Action &);
+	void saveQf(const char *filename);
+	void loadQf(const char *filename);
 };
 #endif

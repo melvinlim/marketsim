@@ -96,3 +96,9 @@ void Qfunction::updateActionStateArray(const double *state,const Action &action)
 		actionStateArray->item[p++]=state[i];
 	}
 }
+void Qfunction::saveQf(const char *filename){
+	IDX::saveNetwork(&net,filename);
+}
+void Qfunction::loadQf(const char *filename){
+	IDX::loadNetwork(&net,filename,GAMMA,LAMBDA_DECAY);
+}

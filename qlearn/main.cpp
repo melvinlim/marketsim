@@ -52,7 +52,7 @@ static PyObject *qlearn_printInfo(PyObject *self,PyObject *args){
 	}
 	printf("\n");
 	printf("previous action: %d\n",info.action);
-	printf("reward: %d\n",info.reward);
+	printf("reward: %f\n",info.reward);
 	printf("state: ");
 	for(int i=0;i<STATEVARS;i++){
 		printf("%f,",info.nextState[i]);

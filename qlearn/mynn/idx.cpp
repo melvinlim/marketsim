@@ -42,14 +42,15 @@ Matrix<double> *IDX::loadIDX(const char *filename){
 	struct idx2 *idx2Header;
 	Matrix<double> *mat;
 	int fd=open(filename,O_RDONLY);
+	int MMAPSIZE=1024*1024;
 	assert(fd>=0);
-	mem=mmap(0,1024*1024,PROT_READ,MAP_FILE|MAP_SHARED,fd,0);
+	mem=mmap(0,MMAPSIZE,PROT_READ,MAP_FILE|MAP_SHARED,fd,0);
 	assert(mem!=MAP_FAILED);
 	idx2Header=(struct idx2 *)mem;
 	assert(verifiedHeader(idx2Header));
 	mat=loadIDXEntry(idx2Header);
 	close(fd);
-	assert(munmap(mem,1024*1024)==0);
+	assert(munmap(mem,MMAPSIZE)==0);
 	return mat;
 }
 Net *IDX::loadNetwork(const char *filename){
@@ -93,8 +94,51 @@ Net *IDX::loadNetwork(const char *filename){
 		idx2Header=(struct idx2 *)ptr;
 	}
 	close(fd);
-	assert(munmap(mem,1024*1024)==0);
+	assert(munmap(mem,MMAPSIZE)==0);
 	return net;
+}
+void IDX::loadNetwork(Net *net,const char *filename,const double &gamma,const double &lambda_decay){
+	void *mem;
+	int offset;
+	struct idx2 *idx2Header;
+	int layers=0;
+	int fd=open(filename,O_RDONLY);
+	int8_t *ptr;
+	int rows,cols;
+	Matrix<double> *mat;
+	int MMAPSIZE=1024*1024*1024;	//this must be >= file size.
+	assert(fd>=0);
+	mem=mmap(0,MMAPSIZE,PROT_READ,MAP_FILE|MAP_SHARED,fd,0);
+	assert(mem!=MAP_FAILED);
+	idx2Header=(struct idx2 *)mem;
+	offset=0;
+	//int ninputs=idx2Header->nRows;
+	//int hidden=idx2Header->nCols;
+	while(verifiedHeader(idx2Header)){
+		rows=idx2Header->nRows;
+		cols=idx2Header->nCols;
+		offset+=sizeof(struct idx2)+(rows*cols*sizeof(double));
+		assert(offset<MMAPSIZE);
+		ptr=(int8_t *)mem+offset;
+		idx2Header=(struct idx2 *)ptr;
+		layers++;
+	}
+	//int noutputs=idx2Header->nCols;
+	//net=new SingleHidden(ninputs,hidden,noutputs,gamma,lambda_decay);
+	idx2Header=(struct idx2 *)mem;
+	offset=0;
+	for(int i=0;i<layers;i++){
+		mat=loadIDXEntry(idx2Header);
+		delete net->L[i];
+		net->insertLayer(i,*mat,gamma,lambda_decay);
+		rows=idx2Header->nRows;
+		cols=idx2Header->nCols;
+		offset+=sizeof(struct idx2)+(rows*cols*sizeof(double));
+		ptr=(int8_t *)mem+offset;
+		idx2Header=(struct idx2 *)ptr;
+	}
+	close(fd);
+	assert(munmap(mem,MMAPSIZE)==0);
 }
 Matrix<double> *IDX::loadIDXEntry(idx2 *hdr){
 	double *ptr;

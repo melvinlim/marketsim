@@ -11,6 +11,7 @@ class Player{
 public:
 	Player();
 	~Player();
+	virtual void save(){};
 //	virtual void decide(Action &,Info &);
 	void verifyRecords(Stack<Info> &);
 };
@@ -34,5 +35,7 @@ public:
 	void decide(const double *,Action &);
 	void train(Stack<Info> &);
 	double getSumSqErr(Stack<Info> &);
+	void save();
+	void load();
 };
 #endif

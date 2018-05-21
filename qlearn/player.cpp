@@ -62,8 +62,6 @@ void Agent::decide(const double *state,Action &action){
 				bestQ=tmpQ;
 			}
 		}
-		printf("%f\n",bestQ);
-		printf("decision (in player.cpp): %d\n",action);
 	}
 //	if(currentTime>TRAININGTIME)
 //		getchar();
@@ -97,7 +95,6 @@ double Agent::getSumSqErr(Stack<Info> &records){
 	}
 	sse/=(double)records.size;
 	printf("sse:%f\n",sse);
-	//printf("%x sse:%f\n",qptr,sse);
 	return sse;
 }
 void Agent::train(Stack<Info> &records){
@@ -142,35 +139,23 @@ void Player::verifyRecords(Stack<Info> &records){
 		r++;
 		info=records.atIndex(i);
 		printf("record: %d\n",r);
-		k=0;
-		for(int i=0;i<VISIONY;i++){
-			for(int j=0;j<VISIONX;j++){
-				printf("%+f,",info.state[k++]);
-			}
-			printf("\n");
-		}
-		for(int i=0;i<VISIONY;i++){
-			for(int j=0;j<VISIONX;j++){
-				printf("%+f,",info.state[k++]);
-			}
-			printf("\n");
+		for(int i=0;i<STATEVARS;i++){
+			printf("%+f,",info.state[i]);
 		}
 		printf("action: %d\n",info.action);
 		printf("reward: %f\n",info.reward);
-		k=0;
-		for(int i=0;i<VISIONY;i++){
-			for(int j=0;j<VISIONX;j++){
-				printf("%+f,",info.nextState[k++]);
-			}
-			printf("\n");
-		}
-		for(int i=0;i<VISIONY;i++){
-			for(int j=0;j<VISIONX;j++){
-				printf("%+f,",info.nextState[k++]);
-			}
-			printf("\n");
+		for(int i=0;i<STATEVARS;i++){
+			printf("%+f,",info.nextState[i]);
 		}
 		if(info.reward>0)
 			getchar();
 	}
+}
+void Agent::save(){
+	qfA.saveQf("qfA.qf");
+	qfB.saveQf("qfB.qf");
+}
+void Agent::load(){
+	qfA.loadQf("qfA.qf");
+	qfB.loadQf("qfB.qf");
 }
