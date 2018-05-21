@@ -97,6 +97,7 @@ class Agent():
 		return n
 	def getState(self,brokerData):
 		(date,account,marketData)=brokerData
+		dow=getDayOfWeek(strDate(date))
 		ownedStocks=account.stocks
 		totalStocks=0
 		for stock in ownedStocks:
