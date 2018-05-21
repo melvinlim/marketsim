@@ -95,6 +95,21 @@ class Agent():
 		if DEBUG:
 			qlearn.printRecords()
 		return n
+	def getState(self,brokerData):
+		(date,account,marketData)=brokerData
+		ownedStocks=account.stocks
+		totalStocks=0
+		for stock in ownedStocks:
+			totalStocks+=ownedStocks[stock]
+		obs=[]
+		for i in range(len(self.stockList)):
+			obs+=buildObs(self.processedBuffer[i])
+			self.processedBuffer[i].pop()
+		obs+=expand(float(dow)-1,5)
+		obs+=[tof(totalStocks>0)]
+		if DEBUG:
+			print obs
+		return obs
 class Human(Agent):
 	def __init__(self,name,funds):
 		self.name=name
@@ -118,11 +133,6 @@ class Human(Agent):
 			print stock,ownedStocks[stock]
 	def decide(self,brokerData):
 		(date,account,marketData)=brokerData
-		ownedStocks=account.stocks
-		totalStocks=0
-		for stock in ownedStocks:
-			totalStocks+=ownedStocks[stock]
-		dow=getDayOfWeek(strDate(date))
 		if self.stockList==[]:
 			for stock in marketData.keys():
 				self.stockList.append(stock)
@@ -138,14 +148,7 @@ class Human(Agent):
 		self.prevAction=self.action
 		self.action=''
 		if len(self.buffer)>=MEMORYSIZE:
-			obs=[]
-			for i in range(len(self.stockList)):
-				obs+=buildObs(self.processedBuffer[i])
-				self.processedBuffer[i].pop()
-			obs+=expand(float(dow)-1,5)
-			obs+=[tof(totalStocks>0)]
-			if DEBUG:
-				print obs
+			obs=self.getState(brokerData)
 			self.prevState=self.state
 			self.state=obs
 			self.buffer.pop()
