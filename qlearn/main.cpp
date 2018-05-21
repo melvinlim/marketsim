@@ -33,7 +33,7 @@ static PyObject *qlearn_decide(PyObject *self,PyObject *args){
 	}
 	player.decide(state,action);
 	long res=action;
-	printf("decision: %l\n",res);
+	printf("decision (in main.cpp): %ld\n",res);
 //	player.decide(const double *state,Action action);
 	return PyLong_FromLong(res);
 }

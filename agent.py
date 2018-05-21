@@ -151,7 +151,9 @@ class Human(Agent):
 		if self.trained:
 			state=self.getState(brokerData)
 			action=qlearn.decide(*state)
-			print 'decision:'+str(action)
+			print 'decision (in python):'+str(action)
+			raw_input()
+			return action
 		else:
 			action=random.randint(0,2)
 			if len(self.buffer)>=MEMORYSIZE:

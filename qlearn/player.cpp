@@ -63,10 +63,10 @@ void Agent::decide(const double *state,Action &action){
 			}
 		}
 		printf("%f\n",bestQ);
-		printf("decision: %d\n",action);
+		printf("decision (in player.cpp): %d\n",action);
 	}
-	if(currentTime>TRAININGTIME)
-		getchar();
+//	if(currentTime>TRAININGTIME)
+//		getchar();
 }
 double Agent::getSumSqErr(Stack<Info> &records){
 	Info info;
