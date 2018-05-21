@@ -147,31 +147,36 @@ class Human(Agent):
 		self.buffer.insert(0,marketData)
 		assert len(self.stockList)==len(marketData.keys())
 		self.updateProcessedBuffer(marketData)
-		action=2
-		if len(self.buffer)>=MEMORYSIZE:
-			obs=self.getState(brokerData)
-			self.prevState=self.state
-			self.state=obs
-			self.buffer.pop()
-			#action=raw_input()
-			self.prevAction=self.action
-			#self.action=getAction(action)
-			self.action=random.randint(0,2)
-			if self.prevState!=None:
-				recordLength=self.updateInfo(self.prevState,self.prevAction,self.reward,self.state)
-				if DEBUG:
-					print 'records length: '+str(recordLength)
-					print 'state length: '+str(len(self.prevState))
-				psse=10
-				sse=5
-				if recordLength==MAXRECORDS:
-					while sse<psse:
-						print psse,sse
-						qlearn.train()
-						psse=sse
-						sse=qlearn.getSumSqErr()
-					raw_input()
-		return action
+		if self.trained:
+			pass
+		else:
+			action=random.randint(0,2)
+			if len(self.buffer)>=MEMORYSIZE:
+				obs=self.getState(brokerData)
+				self.prevState=self.state
+				self.state=obs
+				self.buffer.pop()
+				#action=raw_input()
+				self.prevAction=self.action
+				#self.action=getAction(action)
+				self.action=random.randint(0,2)
+				action=self.action
+				if self.prevState!=None:
+					recordLength=self.updateInfo(self.prevState,self.prevAction,self.reward,self.state)
+					if DEBUG:
+						print 'records length: '+str(recordLength)
+						print 'state length: '+str(len(self.prevState))
+					psse=10
+					sse=5
+					if recordLength==MAXRECORDS:
+						while sse<psse:
+							print psse,sse
+							qlearn.train()
+							psse=sse
+							sse=qlearn.getSumSqErr()
+						raw_input()
+						self.trained=True
+			return action
 class Random(Agent):
 	def __init__(self,name,funds):
 		self.name=name
