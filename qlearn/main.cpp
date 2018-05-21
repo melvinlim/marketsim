@@ -53,7 +53,6 @@ int game(){
 	}
 	return 0;
 }
-#include<stdarg.h>
 static PyObject *qlearn_printState(PyObject *self,PyObject *args){
 	printf("current state: ");
 	for(int i=0;i<STATEVARS;i++){
