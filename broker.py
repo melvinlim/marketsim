@@ -19,7 +19,7 @@ class Broker():
 		dates=self.dates
 		currentData=data[dates[0]]
 		i=0
-		while len(currentData)!=8:
+		while 'XUS.TO' not in currentData:
 			currentData=data[dates[i]]
 			i+=1
 		self.dates=dates[i:]
