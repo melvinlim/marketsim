@@ -106,8 +106,8 @@ class Human(Agent):
 		self.totalValue=funds
 		self.state=None
 		self.action=-1
-	def display(self,state):
-		(date,account,marketData)=state
+	def display(self,brokerData):
+		(date,account,marketData)=brokerData
 		dow=getDayOfWeek(strDate(date))
 		funds=account.funds
 		ownedStocks=account.stocks
@@ -116,8 +116,8 @@ class Human(Agent):
 		print 'reward: '+str(self.reward)
 		for stock in ownedStocks:
 			print stock,ownedStocks[stock]
-	def decide(self,state):
-		(date,account,marketData)=state
+	def decide(self,brokerData):
+		(date,account,marketData)=brokerData
 		ownedStocks=account.stocks
 		totalStocks=0
 		for stock in ownedStocks:
@@ -131,7 +131,7 @@ class Human(Agent):
 		self.prevTotalValue=self.totalValue
 		self.totalValue=account.totalValue(marketData)
 		self.reward=self.totalValue-self.prevTotalValue
-		self.display(state)
+		self.display(brokerData)
 		self.buffer.insert(0,marketData)
 		assert len(self.stockList)==len(marketData.keys())
 		self.updateProcessedBuffer(marketData)
@@ -163,8 +163,8 @@ class Random(Agent):
 		self.startingFunds=funds
 		self.funds=funds
 		self.buffer=[]
-	def decide(self,state):
-		(date,account,marketData)=state
+	def decide(self,brokerData):
+		(date,account,marketData)=brokerData
 		ownedStocks=account.stocks
 		r=random.randint(0,2)
 		return r
@@ -174,9 +174,9 @@ class BuyAndHold(Agent):
 		self.startingFunds=funds
 		self.funds=funds
 		self.buffer=[]
-	def decide(self,state):
+	def decide(self,brokerData):
 		totalStocks=0
-		(date,account,marketData)=state
+		(date,account,marketData)=brokerData
 		ownedStocks=account.stocks
 		for stock in ownedStocks:
 			totalStocks+=ownedStocks[stock]
