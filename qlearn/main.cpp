@@ -53,8 +53,24 @@ int game(){
 	}
 	return 0;
 }
+#include<stdarg.h>
 static PyObject *
-qlearn_getArray(PyObject *self, PyObject *args){
+qlearn_listToState(PyObject *self, PyObject *args){
+	float x;
+	PyObject *tmp;
+	Py_ssize_t sz=PyTuple_Size(args);
+	printf("C++ received: ");
+	for(Py_ssize_t i=0;i<sz;i++){
+		tmp=PyTuple_GetItem(args,i);
+		tmp=PyNumber_Float(tmp);
+		x=PyFloat_AsDouble(tmp);
+		printf("%f,",x);
+	}
+	printf("\n");
+	return PyLong_FromLong(0);
+}
+static PyObject *
+qlearn_getArray(PyObject *self,PyObject *args){
 	float x,y,z;
 	if (!PyArg_ParseTuple(args,"(fff)",&x,&y,&z))
 		return NULL;
@@ -86,6 +102,8 @@ static PyMethodDef QLearnMethods[] = {
      "Execute a shell command."},
     {"game",  qlearn_game, METH_VARARGS,
      "run game."},
+    {"listToState",  qlearn_listToState, METH_VARARGS,
+     "."},
     {"getArray",  qlearn_getArray, METH_VARARGS,
      "pass an array."},
     {NULL, NULL, 0, NULL}        /* Sentinel */

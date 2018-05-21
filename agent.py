@@ -112,6 +112,7 @@ class Human(Agent):
 			self.obs+=expand(float(dow)-1,5)
 			self.obs+=[tof(totalStocks>0)]
 			print self.obs
+			print len(self.obs)
 			self.buffer.pop()
 		return raw_input()
 class Random(Agent):
