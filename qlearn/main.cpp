@@ -108,6 +108,10 @@ static PyObject *qlearn_storeState(PyObject *self,PyObject *args){
 	}
 	return PyLong_FromLong(0);
 }
+static PyObject *qlearn_storeInfo(PyObject *self,PyObject *args){
+	gameController.records.push_back(info);
+	return PyLong_FromLong(0);
+}
 static PyObject *qlearn_game(PyObject *self,PyObject *args){
 	game();
 	return PyLong_FromLong(0);
@@ -124,6 +128,8 @@ static PyMethodDef QLearnMethods[] = {
     {"storeAction",  qlearn_storeAction, METH_VARARGS,
      "."},
     {"storeReward",  qlearn_storeReward, METH_VARARGS,
+     "."},
+    {"storeInfo",  qlearn_storeInfo, METH_VARARGS,
      "."},
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
