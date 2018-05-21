@@ -53,14 +53,28 @@ int game(){
 	}
 	return 0;
 }
-static PyObject *qlearn_printState(PyObject *self,PyObject *args){
-	printf("current state: ");
+static PyObject *qlearn_printInfo(PyObject *self,PyObject *args){
+	printf("\naction: %d\n",info.action);
+	printf("state: ");
 	for(int i=0;i<STATEVARS;i++){
 		printf("%f,",info.state[i]);
 	}
+	printf("\nreward: %d\n",info.reward);
 	return PyLong_FromLong(0);
 }
-static PyObject *qlearn_listToState(PyObject *self,PyObject *args){
+static PyObject *qlearn_storeReward(PyObject *self,PyObject *args){
+	double x;
+	PyArg_ParseTuple(args,"f",&x);
+	info.reward=x;
+	return PyLong_FromLong(0);
+}
+static PyObject *qlearn_storeAction(PyObject *self,PyObject *args){
+	int x;
+	PyArg_ParseTuple(args,"i",&x);
+	info.action=x;
+	return PyLong_FromLong(0);
+}
+static PyObject *qlearn_storeState(PyObject *self,PyObject *args){
 	float x;
 	PyObject *tmp;
 	Py_ssize_t sz=PyTuple_Size(args);
@@ -84,9 +98,13 @@ static PyObject *qlearn_game(PyObject *self,PyObject *args){
 static PyMethodDef QLearnMethods[] = {
     {"game",  qlearn_game, METH_VARARGS,
      "run game."},
-    {"printState",  qlearn_printState, METH_VARARGS,
+    {"printInfo",  qlearn_printInfo, METH_VARARGS,
      "."},
-    {"listToState",  qlearn_listToState, METH_VARARGS,
+    {"storeState",  qlearn_storeState, METH_VARARGS,
+     "."},
+    {"storeAction",  qlearn_storeAction, METH_VARARGS,
+     "."},
+    {"storeReward",  qlearn_storeReward, METH_VARARGS,
      "."},
     {NULL, NULL, 0, NULL}        /* Sentinel */
 };
