@@ -4,15 +4,15 @@
 #include"defs.h"
 #include<string.h>
 #include<time.h>
+GameController gameController;
+Info info;
 int game(){
 	time_t startTime,endTime;
-	GameController gameController;
 	#ifdef HUMAN
 		Human player;
 	#else
 		Agent player;
 	#endif
-	Info info;
 	info.reward=0;
 	memset(info.state,0,sizeof(double)*STATEVARS);
 	unsigned long t=0;
@@ -54,8 +54,14 @@ int game(){
 	return 0;
 }
 #include<stdarg.h>
-static PyObject *
-qlearn_listToState(PyObject *self,PyObject *args){
+static PyObject *qlearn_printState(PyObject *self,PyObject *args){
+	printf("current state: ");
+	for(int i=0;i<STATEVARS;i++){
+		printf("%f,",info.state[i]);
+	}
+	return PyLong_FromLong(0);
+}
+static PyObject *qlearn_listToState(PyObject *self,PyObject *args){
 	float x;
 	PyObject *tmp;
 	Py_ssize_t sz=PyTuple_Size(args);
@@ -66,19 +72,21 @@ qlearn_listToState(PyObject *self,PyObject *args){
 		tmp=PyNumber_Float(tmp);
 		if(tmp==0)	return 0;
 		x=PyFloat_AsDouble(tmp);
+		info.state[i]=x;
 		printf("%f,",x);
 	}
 	printf("\n");
 	return PyLong_FromLong(0);
 }
-static PyObject *
-qlearn_game(PyObject *self,PyObject *args){
+static PyObject *qlearn_game(PyObject *self,PyObject *args){
 	game();
 	return PyLong_FromLong(0);
 }
 static PyMethodDef QLearnMethods[] = {
     {"game",  qlearn_game, METH_VARARGS,
      "run game."},
+    {"printState",  qlearn_printState, METH_VARARGS,
+     "."},
     {"listToState",  qlearn_listToState, METH_VARARGS,
      "."},
     {NULL, NULL, 0, NULL}        /* Sentinel */
