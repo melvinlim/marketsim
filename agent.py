@@ -1,3 +1,6 @@
+import sys
+sys.path.append('qlearn')
+import qlearn
 from dayofweek import *
 from statistics import *
 import random
@@ -81,6 +84,13 @@ class Agent():
 			self.processedBuffer[i].insert(0,processed)
 			i+=1
 	def updateInfo(self,ps,pa,r,s):
+		qlearn.storeState(*ps)
+		qlearn.storeAction(pa)
+		qlearn.storeReward(r)
+		qlearn.storeNextState(*s)
+		qlearn.printInfo()
+		qlearn.storeInfo()
+		qlearn.printRecords()
 		return 0
 class Human(Agent):
 	def __init__(self,name,funds):
@@ -141,6 +151,7 @@ class Human(Agent):
 			self.action=getAction(action)
 			if self.prevState!=None:
 				self.updateInfo(self.prevState,self.prevAction,self.reward,self.state)
+				print len(self.prevState)
 		return self.action
 class Random(Agent):
 	def __init__(self,name,funds):
