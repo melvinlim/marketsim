@@ -71,7 +71,8 @@ def buildObs(buf):
 	res.append(tof(buf[0][4]<(volm-volsd)))
 	return res
 class Agent():
-	def __init__(self,funds):
+	def __init__(self,name,funds):
+		self.name=name
 		self.startingFunds=funds
 		self.funds=funds
 		self.buffer=[]
@@ -132,8 +133,7 @@ class Agent():
 			print stock,ownedStocks[stock]
 class QAgent(Agent):
 	def __init__(self,name,funds):
-		self.name=name
-		Agent.__init__(self,funds)
+		Agent.__init__(self,name,funds)
 	def decide(self,brokerData):
 		(date,account,marketData)=brokerData
 		if self.stockList==[]:
@@ -185,8 +185,7 @@ class QAgent(Agent):
 			return action
 class Human(Agent):
 	def __init__(self,name,funds):
-		self.name=name
-		Agent.__init__(self,funds)
+		Agent.__init__(self,name,funds)
 	def decide(self,brokerData):
 		(date,account,marketData)=brokerData
 		if self.stockList==[]:
@@ -238,8 +237,7 @@ class Human(Agent):
 			return action
 class Random(Agent):
 	def __init__(self,name,funds):
-		self.name=name
-		Agent.__init__(self,funds)
+		Agent.__init__(self,name,funds)
 	def decide(self,brokerData):
 		(date,account,marketData)=brokerData
 		ownedStocks=account.stocks
@@ -247,8 +245,7 @@ class Random(Agent):
 		return r
 class BuyAndHold(Agent):
 	def __init__(self,name,funds):
-		self.name=name
-		Agent.__init__(self,funds)
+		Agent.__init__(self,name,funds)
 	def decide(self,brokerData):
 		totalStocks=0
 		(date,account,marketData)=brokerData
