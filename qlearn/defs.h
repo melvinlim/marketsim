@@ -8,6 +8,7 @@
 #define STATEVARS 166
 #define ACTIONVARS 3
 #define RANDSCALING 10
+#define SCALE_FACTOR 10
 #define MEMORYSIZE 1000
 #define BATCHSIZE 100
 #define ALPHA 0.1

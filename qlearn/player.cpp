@@ -35,8 +35,7 @@ void Human::decide(const double *state,Action &action){
 }
 Agent::Agent():
 qfA(STATEVARS,ACTIONVARS),
-qfB(STATEVARS,ACTIONVARS),
-trainSet(BATCHSIZE)
+qfB(STATEVARS,ACTIONVARS)
 {
 	currentTime=0;
 	qfA.nextQ=&qfB;

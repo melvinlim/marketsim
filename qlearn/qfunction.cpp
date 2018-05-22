@@ -1,6 +1,6 @@
 #include"qfunction.h"
 Qfunction::Qfunction(int nStateVars,int nActions):
-net(nActions+nStateVars,HIDDENUNITS,1,GAMMA,LAMBDA_DECAY)
+net(nActions+nStateVars,HIDDENUNITS,1,GAMMA,LAMBDA_DECAY,SCALE_FACTOR)
 {
 	this->nActions=nActions;
 	this->nStateVars=nStateVars;
