@@ -72,6 +72,7 @@ def buildObs(buf):
 	return res
 class Agent():
 	def __init__(self,name,funds):
+		random.seed()
 		self.name=name
 		self.startingFunds=funds
 		self.funds=funds
