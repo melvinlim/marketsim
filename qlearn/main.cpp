@@ -1,15 +1,15 @@
 #include<Python.h>
-#include"gamecontroller.h"
 #include"player.h"
+#include"stack.h"
 #include"defs.h"
 #include<string.h>
 #include<time.h>
-GameController gameController;
+Stack<Info> records(MEMORYSIZE);
 Info info;
 Agent player;
 static PyObject *qlearn_getSumSqErr(PyObject *self,PyObject *args){
 	double x;
-	x=player.getSumSqErr(gameController.records);
+	x=player.getSumSqErr(records);
 	return PyFloat_FromDouble(x);
 }
 static PyObject *qlearn_decide(PyObject *self,PyObject *args){
@@ -42,11 +42,11 @@ static PyObject *qlearn_saveQ(PyObject *self,PyObject *args){
 	return PyLong_FromLong(0);
 }
 static PyObject *qlearn_train(PyObject *self,PyObject *args){
-	player.train(gameController.records);
+	player.train(records);
 	return PyLong_FromLong(0);
 }
 static PyObject *qlearn_printRecords(PyObject *self,PyObject *args){
-	player.verifyRecords(gameController.records);
+	player.verifyRecords(records);
 	return PyLong_FromLong(0);
 }
 static PyObject *qlearn_printInfo(PyObject *self,PyObject *args){
@@ -105,8 +105,8 @@ static PyObject *qlearn_storeState(PyObject *self,PyObject *args){
 	return PyLong_FromLong(0);
 }
 static PyObject *qlearn_storeInfo(PyObject *self,PyObject *args){
-	gameController.records.push_back(info);
-	long n=gameController.records.size;
+	records.push_back(info);
+	long n=records.size;
 	return PyLong_FromLong(n);
 }
 static PyMethodDef QLearnMethods[] = {

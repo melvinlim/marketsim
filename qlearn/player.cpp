@@ -132,7 +132,6 @@ void Agent::train(Stack<Info> &records){
 }
 void Player::verifyRecords(Stack<Info> &records){
 	Info info;
-	int k;
 	int r=0;
 	for(int i=0;i<records.size;i++){
 		r++;
