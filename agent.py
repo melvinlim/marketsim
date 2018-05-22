@@ -135,6 +135,10 @@ class Agent():
 class QAgent(Agent):
 	def __init__(self,name,funds):
 		Agent.__init__(self,name,funds)
+	def load(self):
+		qlearn.loadQ()
+	def save(self):
+		qlearn.saveQ()
 	def decide(self,brokerData):
 		(date,account,marketData)=brokerData
 		if self.stockList==[]:
@@ -153,7 +157,7 @@ class QAgent(Agent):
 			state=self.getState(brokerData)
 			action=qlearn.decide(*state)
 			print 'decision (in python):'+str(action)
-			raw_input()
+			#raw_input()
 			return action
 		else:
 			action=random.randint(0,2)
@@ -181,7 +185,7 @@ class QAgent(Agent):
 #							qlearn.train()
 #							psse=sse
 #							sse=qlearn.getSumSqErr()
-						raw_input()
+						#raw_input()
 						self.trained=True
 			return action
 class Human(Agent):
