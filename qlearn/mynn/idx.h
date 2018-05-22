@@ -37,12 +37,11 @@ struct image{
 namespace IDX{
 	void displayImage(double *img);
 	void printImage(struct image *img);
-	Matrix<double> *loadIDXEntry(struct idx2 *);
+	void loadIDXEntry(Matrix<double> &,struct idx2 *);
 	void saveIDX(Matrix<double> &,const char *);
 	void saveIDXEntry(Matrix<double> &,int);
 	Matrix<double> *loadIDX(const char *);
 	void saveNetwork(Net *,const char *);
-	Net *loadNetwork(const char *,const double &,const double &);
 	void loadNetwork(Net *,const char *,const double &,const double &);
 	bool verifiedHeader(struct idx2 *);
 };

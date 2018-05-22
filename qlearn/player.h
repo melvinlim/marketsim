@@ -16,13 +16,6 @@ public:
 //	virtual void decide(Action &,Info &);
 	void verifyRecords(Stack<Info> &);
 };
-class Human:public Player{
-public:
-	Human();
-	~Human();
-	void decide(const double *,Action &);
-	void train(Stack<Info> &){}
-};
 class Agent:public Player{
 public:
 	Array<double> *QArrayA;

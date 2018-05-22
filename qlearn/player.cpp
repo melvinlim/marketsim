@@ -2,37 +2,6 @@
 Player::Player(){}
 Player::~Player(){}
 //void Player::decide(Action &action,Info &info){}
-Human::Human(){}
-Human::~Human(){}
-void Human::decide(const double *state,Action &action){
-	action=0;
-	printf(":");
-	char tmp;
-	char prev;
-	tmp=' ';
-	while(tmp!='\n'){
-		prev=tmp;
-		tmp=getchar();
-	}
-	switch(prev){
-		case 'n':
-			action=NORTH;
-		break;
-		case 'e':
-			action=EAST;
-		break;
-		case 's':
-			action=SOUTH;
-		break;
-		case 'w':
-			action=WEST;
-		break;
-		default:
-			action=(int)state[0];
-			action=4;
-		break;
-	}
-}
 Agent::Agent():
 qfA(STATEVARS,ACTIONVARS),
 qfB(STATEVARS,ACTIONVARS)

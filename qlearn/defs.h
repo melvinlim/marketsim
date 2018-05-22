@@ -1,10 +1,6 @@
 #ifndef _DEFS_H
 #define _DEFS_H
-//#define HUMAN
 //#define DEBUG
-#define VISIONX 5
-#define VISIONY 5
-//#define STATEVARS (VISIONX*VISIONY)
 #define STATEVARS 166
 #define ACTIONVARS 3
 #define RANDSCALING 10
@@ -24,10 +20,9 @@
 #endif
 #define TIMELIMIT 10
 
-#define NORTH 0
-#define EAST 1
-#define SOUTH 2
-#define WEST 3
+#define BUY 0
+#define SELL 1
+#define WAIT 2
 
 typedef int Action;
 struct Info{
