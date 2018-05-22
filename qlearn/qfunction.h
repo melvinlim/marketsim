@@ -3,7 +3,7 @@
 #include"defs.h"
 #include"mynn/net.h"
 #include"mynn/idx.h"
-#include"array.h"
+#include"mynn/array.h"
 #include<stdio.h>
 #include<stdlib.h>
 const double aStates[4][4]={{+1,-1,-1,-1},{-1,+1,-1,-1},{-1,-1,+1,-1},{-1,-1,-1,+1}};

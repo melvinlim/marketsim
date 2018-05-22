@@ -1,6 +1,6 @@
 #ifndef _WORLD_H
 #define _WORLD_H
-#include"matrix.h"
+#include"mynn/matrix.h"
 #include"object.h"
 #include"defs.h"
 #include<vector>
