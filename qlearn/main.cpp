@@ -6,11 +6,7 @@
 #include<time.h>
 GameController gameController;
 Info info;
-#ifdef HUMAN
-Human player;
-#else
 Agent player;
-#endif
 static PyObject *qlearn_getSumSqErr(PyObject *self,PyObject *args){
 	double x;
 	x=player.getSumSqErr(gameController.records);
