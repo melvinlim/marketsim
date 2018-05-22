@@ -37,6 +37,14 @@ static PyObject *qlearn_decide(PyObject *self,PyObject *args){
 //	player.decide(const double *state,Action action);
 	return PyLong_FromLong(res);
 }
+static PyObject *qlearn_loadQ(PyObject *self,PyObject *args){
+	player.load();
+	return PyLong_FromLong(0);
+}
+static PyObject *qlearn_saveQ(PyObject *self,PyObject *args){
+	player.save();
+	return PyLong_FromLong(0);
+}
 static PyObject *qlearn_train(PyObject *self,PyObject *args){
 	player.train(gameController.records);
 	return PyLong_FromLong(0);
@@ -109,6 +117,10 @@ static PyMethodDef QLearnMethods[] = {
     {"decide",  qlearn_decide, METH_VARARGS,
      "."},
     {"train",  qlearn_train, METH_VARARGS,
+     "."},
+    {"saveQ",  qlearn_saveQ, METH_VARARGS,
+     "."},
+    {"loadQ",  qlearn_loadQ, METH_VARARGS,
      "."},
     {"getSumSqErr",  qlearn_getSumSqErr, METH_VARARGS,
      "."},
