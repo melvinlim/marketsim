@@ -5,7 +5,6 @@ md=MarketData('allData.pkl')
 data=md['all']
 qagent=QAgent('QAgent',20000)
 if os.path.isfile('qfA.qf'):
-	print 'loading agent'
 	qagent.load()
 agents=[]
 #agents.append(Human('human',20000))

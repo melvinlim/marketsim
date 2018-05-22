@@ -7,8 +7,8 @@ import random
 MAXRECORDS=1000	#this is defined as MEMORYSIZE in qlearn/defs.h
 MEMORYSIZE=60
 WINDOWSZ=30
-DEBUG=True
-#DEBUG=False
+#DEBUG=True
+DEBUG=False
 def expand(x,n):
 	res=[]
 	for i in range(n):
@@ -136,8 +136,10 @@ class QAgent(Agent):
 	def __init__(self,name,funds):
 		Agent.__init__(self,name,funds)
 	def load(self):
+		print 'loading agent.'
 		qlearn.loadQ()
 	def save(self):
+		print 'saving agent.'
 		qlearn.saveQ()
 	def decide(self,brokerData):
 		(date,account,marketData)=brokerData
@@ -149,14 +151,15 @@ class QAgent(Agent):
 		self.prevTotalValue=self.totalValue
 		self.totalValue=account.totalValue(marketData)
 		self.reward=self.totalValue-self.prevTotalValue
-		self.display(brokerData)
+#		self.display(brokerData)
 		self.buffer.insert(0,marketData)
 		assert len(self.stockList)==len(marketData.keys())
 		self.updateProcessedBuffer(marketData)
 		if self.trained:
 			state=self.getState(brokerData)
 			action=qlearn.decide(*state)
-			print 'decision (in python):'+str(action)
+			if DEBUG:
+				print 'decision (in python):'+str(action)
 			#raw_input()
 			return action
 		else:
