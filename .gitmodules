@@ -1,0 +1,3 @@
+[submodule "qlearn"]
+	path = qlearn
+	url = http://github.com/melvinlim/qlearn
