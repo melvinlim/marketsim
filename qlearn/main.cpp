@@ -66,7 +66,7 @@ static PyObject *qlearn_printInfo(PyObject *self,PyObject *args){
 }
 static PyObject *qlearn_storeReward(PyObject *self,PyObject *args){
 	double x;
-	PyArg_ParseTuple(args,"f",&x);
+	PyArg_ParseTuple(args,"d",&x);
 	info.reward=x;
 	return PyLong_FromLong(0);
 }
